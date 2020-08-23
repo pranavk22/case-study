@@ -5,7 +5,6 @@ var flightSchema = new Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   from: {
     type: String,

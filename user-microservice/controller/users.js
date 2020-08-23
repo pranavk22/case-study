@@ -1,69 +1,55 @@
+const JWT = require("jsonwebtoken");
 let User = require("../models/user");
-// let Flight = require("../models/flight");
 
+signToken = (user) => {
+  return JWT.sign(
+    {
+      iat: new Date().getTime(),
+    },
+    process.env.JWT_KEY,
+    {
+      subject: user.id,
+      issuer: "my-server",
+      expiresIn: "1h",
+    }
+  );
+};
 module.exports = {
-  getAllUsers: async (req, res, next) => {
-    const users = await User.find();
-    res.status(200).json(users);
+  signUp: async (req, res, next) => {
+    const { email, password } = req.body;
+
+    const foundUser = await User.findOne({ "local.email": email });
+    if (foundUser) {
+      return res.status(409).json({ error: "Email is already in use" });
+    }
+
+    const newUser = new User({
+      method: "local",
+      local: {
+        email: email,
+        password: password,
+      },
+    });
+    await newUser.save();
+
+    const token = signToken(newUser);
+
+    res.status(200).json({ token });
   },
 
-  addNewUser: async (req, res, next) => {
-    const newUser = new User(req.body);
-    const user = await newUser.save();
-    res.status(201).json({ success: "true" });
+  signIn: async (req, res, next) => {
+    const token = signToken(req.user);
+    res.status(200).json({ token });
+    console.log("Inside signIn method");
   },
 
-  getUser: async (req, res, next) => {
-    const { userId } = req.params;
-    const user = await User.findById(userId);
-    res.status(200).json(user);
+  // googleOAuth: async (req, res, next) => {
+  //   const token = signToken(req.user);
+  //   res.status(200).json({ token });
+  // },
+
+  secret: async (req, res, next) => {
+    console.log("Inside secret method");
+    res.json({ secret: "response" });
   },
-
-  deleteUser: async (req, res, next) => {
-    const { userId } = req.params;
-    const result = await User.findByIdAndDelete(userId);
-    res.status(200).json({ success: "true" });
-  },
-
-  replaceUser: async (req, res, next) => {
-    const { userId } = req.params;
-    const newUser = req.body;
-    const result = await User.findByIdAndUpdate(userId, newUser);
-    console.log("result", result);
-    res.status(200).json({ success: "true" });
-  },
-
-  getUserFlights: async (req, res, next) => {
-    const { userId } = req.params;
-    const user = await User.findById(userId);
-    res.status(200).json(user.flights);
-  },
-
-//   addUserFlight: async (req, res, next) => {
-//     const { userId } = req.params;
-//     const newFlight = new Flight(req.body);
-//     const user = await User.findById(userId);
-//     await newFlight.save();
-//     user.flights.push(newFlight);
-//     await user.save();
-//     res.status(201).json(newFlight);
-//   },
-
-//   addUserFlightById: async (req, res, next) => {
-//     const { userId, flightId } = req.params;
-//     const newFlight = await Flight.findById(flightId);
-//     const user = await User.findById(userId);
-//     user.flights.push(newFlight);
-//     await user.save();
-//     res.status(201).json(newFlight);
-//   },
-
-//   cancelUserFlightById: async (req, res, next) => {
-//     const { userId, flightId } = req.params;
-//     const user = await User.findById(userId);
-//     const flight = await Flight.findById(flightId);
-//     user.flights.pull(flight);
-//     await user.save();
-//     res.status(200).json({ success: "true" });
-//   },
 };

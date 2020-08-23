@@ -1,5 +1,5 @@
 let Booking = require("../models/booking");
-let User = require("../models/user");
+let User = require("../models/userDetails");
 let Flight = require("../models/flight");
 
 module.exports = {
