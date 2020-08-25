@@ -1,8 +1,8 @@
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
+const GoogleStrategy = require("passport-google-token").Strategy;
+const FacebookStrategy = require("passport-facebook-token");
 const { ExtractJwt } = require("passport-jwt");
 const User = require("./models/user");
 
@@ -52,11 +52,11 @@ passport.use(
 );
 
 passport.use(
+  "googleToken",
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:9300/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       // User.findOrCreate({ googleId: profile.id }, function (err, user) {
@@ -92,12 +92,12 @@ passport.use(
 );
 
 passport.use(
+  "facebookToken",
   new FacebookStrategy(
     {
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "http://localhost:9300/facebook/callback",
-      profileFields: ["id", "email", "name", "displayName"],
+      // profileFields: ["id", "email", "name", "displayName"],
     },
     async (accessToken, refreshToken, profile, done) => {
       // User.findOrCreate({ facebookId: profile.id }, function (err, user) {
