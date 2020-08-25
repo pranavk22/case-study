@@ -13,46 +13,38 @@ router.route("/secret").get(authenticate("jwt"), UserController.secret);
 
 router
   .route("/google")
-  .get(
-    passport.authenticate(
-      "google",
-      { scope: ["profile", "email"] },
-      { session: false }
-    )
-  );
+  .post(authenticate("googleToken"), UserController.googleOAuth);
 
-router
-  .route("/google/callback")
-  .get(
-    passport.authenticate("google", { failureRedirect: "/signin" }),
-    function (req, res) {
-      // Successful authentication, redirect home.
-      const token = signToken(req.user);
-      res.status(200).send("Hi " + req.user.google.displayName);
+// router
+//   .route("/google/callback")
+//   .get(
+//     passport.authenticate("google", { failureRedirect: "/signin" }),
+//     function (req, res) {
+//       // Successful authentication, redirect home.
+//       const token = signToken(req.user);
+//       res.status(200).send("Hi " + req.user.google.displayName);
 
-      // res.status(200).json({ token });
-    }
-  );
+//       // res.status(200).json({ token });
+//     }
+//   );
 
 router
   .route("/facebook")
-  .get(
-    passport.authenticate("facebook", { scope: ["email"] }, { session: false })
-  );
+  .post(authenticate("facebookToken"), UserController.googleOAuth);
 
-router
-  .route("/facebook/callback")
-  .get(
-    passport.authenticate("facebook", { failureRedirect: "/signin" }),
-    function (req, res) {
-      // Successful authentication, redirect home.
-      const token = signToken(req.user);
-      // res.status(200).send("Hi ");
-      // console.log(req);
-      // res.redirect("/");
+// router
+//   .route("/facebook/callback")
+//   .get(
+//     passport.authenticate("facebook", { failureRedirect: "/signin" }),
+//     function (req, res) {
+//       // Successful authentication, redirect home.
+//       const token = signToken(req.user);
+//       // res.status(200).send("Hi ");
+//       // console.log(req);
+//       // res.redirect("/");
 
-      res.status(200).json({ token });
-    }
-  );
+//       res.status(200).json({ token });
+//     }
+//   );
 
 module.exports = router;

@@ -11,6 +11,7 @@ var userSchema = new Schema({
   local: {
     email: {
       type: String,
+      match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
       // required: true,
       // unique: true,
       lowercase: true,
