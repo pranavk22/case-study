@@ -11,9 +11,7 @@ router.route("/signin").post(authenticate("local"), UserController.signIn);
 
 router.route("/secret").get(authenticate("jwt"), UserController.secret);
 
-router
-  .route("/google")
-  .post(authenticate("googleToken"), UserController.googleOAuth);
+router.route("/google").post(authenticate("googleToken"), UserController.oAuth);
 
 // router
 //   .route("/google/callback")
@@ -30,7 +28,7 @@ router
 
 router
   .route("/facebook")
-  .post(authenticate("facebookToken"), UserController.googleOAuth);
+  .post(authenticate("facebookToken"), UserController.oAuth);
 
 // router
 //   .route("/facebook/callback")

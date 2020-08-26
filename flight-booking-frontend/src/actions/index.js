@@ -7,6 +7,7 @@ import {
   GET_SECRET,
   SEARCH_FLIGHT,
   FLIGHT_ERROR,
+  BOOK_FLIGHT,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -18,7 +19,7 @@ export const oauthGoogle = (data) => {
     console.log(res);
     dispatch({
       type: AUTH_SIGN_UP,
-      payload: res.data.token,
+      payload: res.data,
     });
     localStorage.setItem("JWT_TOKEN", res.data.token);
     const authHeader = "Bearer " + res.data.token;
@@ -127,6 +128,16 @@ export const validateSignIn = (data) => {
   };
 };
 
+export const storeFlightId = (flightId) => {
+  console.log(flightId);
+  return (dispatch) => {
+    dispatch({
+      type: BOOK_FLIGHT,
+      payload: flightId,
+    });
+  };
+};
+
 export const getSecret = () => {
   return async (dispatch) => {
     try {
@@ -166,7 +177,7 @@ export const searchFlight = (data) => {
         type: SEARCH_FLIGHT,
         payload: res.data,
       });
-      return res.data;
+      // return res.data;
     } catch (error) {
       dispatch({
         type: FLIGHT_ERROR,

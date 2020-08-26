@@ -8,6 +8,7 @@ import {
 const DEFAULT_STATE = {
   isAuthenticated: false,
   token: "",
+  user: {},
   errorMessage: "",
 };
 
@@ -16,14 +17,16 @@ export default (state = DEFAULT_STATE, action) => {
     case AUTH_SIGN_UP:
       return {
         ...state,
-        token: action.payload,
+        token: action.payload.token,
+        user: action.payload.newUser,
         isAuthenticated: true,
         errorMessage: "",
       };
     case AUTH_SIGN_IN:
       return {
         ...state,
-        token: action.payload,
+        token: action.payload.token,
+        user: action.payload.newUser,
         isAuthenticated: true,
         errorMessage: "",
       };
@@ -31,6 +34,7 @@ export default (state = DEFAULT_STATE, action) => {
       return {
         ...state,
         token: action.payload,
+        user: action.payload,
         isAuthenticated: false,
         errorMessage: "",
       };

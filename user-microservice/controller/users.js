@@ -34,18 +34,20 @@ module.exports = {
 
     const token = signToken(newUser);
 
-    res.status(200).json({ token });
+    res.status(200).json({ token, newUser });
   },
 
   signIn: async (req, res, next) => {
     const token = signToken(req.user);
-    res.status(200).json({ token });
+    const newUser = req.user;
+    res.status(200).json({ token, newUser });
     console.log("Inside signIn method");
   },
 
-  googleOAuth: async (req, res, next) => {
+  oAuth: async (req, res, next) => {
     const token = signToken(req.user);
-    res.status(200).json({ token });
+    const newUser = req.user;
+    res.status(200).json({ token, newUser });
   },
 
   secret: async (req, res, next) => {

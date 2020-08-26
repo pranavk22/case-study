@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Alert, Card, Table } from "react-bootstrap";
+import { Button, Alert, Card, Modal } from "react-bootstrap";
 import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -11,14 +11,15 @@ export class Home extends Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
-    this.state = { flights: [] };
+    this.state = { show: false };
+    // this.state = { flights: [] };
   }
 
   async onSubmit(formData) {
     console.log(formData);
-    const flights = await this.props.searchFlight(formData);
-    this.setState({ flights: flights });
-    console.log(this.state.flights);
+    await this.props.searchFlight(formData);
+    // this.setState({ flights: flights });
+    // console.log(this.state.flights);
     // if (res) {
     //   await this.props.signUp(formData);
     // }
@@ -26,21 +27,26 @@ export class Home extends Component {
     //   this.props.history.push("/");
     // }
   }
+
+  bookNow(flightId) {
+    if (!this.props.isAuth) {
+      this.props.storeFlightId(flightId);
+      this.handleShow();
+    } else {
+      this.props.history.push("/book/" + flightId);
+    }
+  }
+
+  handleClose = () => this.setState({ show: false });
+  handleShow = () => this.setState({ show: true });
+
   render() {
     const { handleSubmit } = this.props;
 
     return (
       <div className="row">
-        <div
-          className="col"
-          style={{
-            display: "flex",
-            justifyContent: "left",
-            alignItems: "left",
-            marginLeft: "2rem",
-          }}
-        >
-          <Card style={{ width: "18rem" }}>
+        <div className="col" style={{ marginLeft: "2rem", columnWidth: "30%" }}>
+          <Card>
             <Card.Header>Search Flight</Card.Header>
             <Card.Body>
               <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -56,6 +62,7 @@ export class Home extends Component {
                     component={CustomInput}
                   ></Field>
                 </fieldset>
+
                 <fieldset>
                   <Field
                     name="to"
@@ -89,13 +96,54 @@ export class Home extends Component {
             </Card.Body>
           </Card>
         </div>
-        <div className="col">
-          <Table>
-            {this.state.flights}
-            {this.state.flights.map((item) => (
-              <tr key={item.OrderID}>{item.CustomerID}</tr>
-            ))}
-          </Table>
+        <div
+          className="col"
+          style={{ columnWidth: "70%", marginRight: "2rem" }}
+        >
+          {/* <CardDeck> */}
+          {this.props.flights.map((flight) => (
+            <Card key={flight._id} style={{ marginBottom: "2rem" }}>
+              <Card.Header>{flight.name}</Card.Header>
+              <Card.Body>
+                <Card.Title>{flight.airlines}</Card.Title>
+                <Card.Text>
+                  From: {flight.from} To: {flight.to}
+                  <br />
+                  Price:&#8377;{flight.fare}
+                </Card.Text>
+                <Button
+                  variant="primary"
+                  onClick={() => this.bookNow(flight._id)}
+                  // href={"/book/" + flight._id}
+                >
+                  Book now
+                </Button>
+              </Card.Body>
+            </Card>
+          ))}
+
+          <Modal
+            show={this.state.show}
+            onHide={this.handleClose}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Sign In</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>You need to sign in for booking a ticket</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.handleClose}>
+                Cancel
+              </Button>
+              <Button variant="primary" href="/signin">
+                Sign In
+              </Button>
+              <Button variant="primary" href="/signup">
+                Sign Up
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       </div>
     );
@@ -104,6 +152,7 @@ export class Home extends Component {
 
 function mapStateToProps(state) {
   return {
+    isAuth: state.auth.isAuthenticated,
     flights: state.flight.flights,
     errorMessage: state.auth.errorMessage,
   };

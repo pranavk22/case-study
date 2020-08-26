@@ -30,9 +30,13 @@ class SignIn extends Component {
 
   async responseFacebook(response) {
     console.log(response);
+    console.log(this.props.flightId);
     await this.props.oauthFacebook(response.accessToken);
     if (!this.props.errorMessage) {
-      this.props.history.push("/");
+      console.log(this.props.flightId);
+      if (this.props.flightId) {
+        this.props.history.push("/book/" + this.props.flightId);
+      } else this.props.history.push("/");
     }
   }
 
@@ -132,6 +136,7 @@ class SignIn extends Component {
 function mapStateToProps(state) {
   return {
     errorMessage: state.auth.errorMessage,
+    flightId: state.flight.flightId,
   };
 }
 

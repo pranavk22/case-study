@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 var flightSchema = new Schema({
+  airlines: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
