@@ -24,7 +24,9 @@ class SignIn extends Component {
       await this.props.signIn(formData);
     }
     if (!this.props.errorMessage) {
-      this.props.history.push("/");
+      if(this.props.flightId)
+        this.props.history.push("/book/" + this.props.flightId);
+        else this.props.history.push("/");
     }
   }
 
@@ -44,7 +46,9 @@ class SignIn extends Component {
     console.log(response);
     await this.props.oauthGoogle(response.accessToken);
     if (!this.props.errorMessage) {
-      this.props.history.push("/");
+      if(this.props.flightId)
+        this.props.history.push("/book/" + this.props.flightId);
+        else this.props.history.push("/");
     }
   }
 

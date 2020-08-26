@@ -40,6 +40,14 @@ export class Home extends Component {
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
 
+  handleSignIn = () => {
+    this.props.history.push("/signin");
+  }
+
+  handleSignUp = () => {
+    this.props.history.push("/signup");
+  }
+
   render() {
     const { handleSubmit } = this.props;
 
@@ -136,10 +144,10 @@ export class Home extends Component {
               <Button variant="secondary" onClick={this.handleClose}>
                 Cancel
               </Button>
-              <Button variant="primary" href="/signin">
+              <Button variant="primary" onClick={this.handleSignIn}>
                 Sign In
               </Button>
-              <Button variant="primary" href="/signup">
+              <Button variant="primary" onClick={this.handleSignUp}>
                 Sign Up
               </Button>
             </Modal.Footer>
