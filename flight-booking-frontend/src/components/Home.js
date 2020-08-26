@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Button, Alert, Card, Table } from "react-bootstrap";
-import { reduxForm, Field } from "redux-form";
-import { connect } from "react-redux";
-import { compose } from "redux";
+import React, { Component } from 'react';
+import { Button, Alert, Card, Table } from 'react-bootstrap';
+import { reduxForm, Field } from 'redux-form';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
-import * as actions from "../actions";
-import CustomInput from "./CustomInput";
+import * as actions from '../actions';
+import CustomInput from './CustomInput';
 
 export class Home extends Component {
   constructor(props) {
@@ -30,71 +30,72 @@ export class Home extends Component {
     const { handleSubmit } = this.props;
 
     return (
-      <div className="row">
+      <div className='row'>
         <div
-          className="col"
+          className='col'
           style={{
-            display: "flex",
-            justifyContent: "left",
-            alignItems: "left",
-            marginLeft: "2rem",
+            display: 'flex',
+            justifyContent: 'left',
+            alignItems: 'left',
+            marginLeft: '2rem',
           }}
         >
-          <Card style={{ width: "18rem" }}>
+          <Card style={{ width: '18rem' }}>
             <Card.Header>Search Flight</Card.Header>
             <Card.Body>
               <form onSubmit={handleSubmit(this.onSubmit)}>
                 <fieldset>
                   <Field
-                    name="from"
-                    type="text"
-                    id="from"
-                    maxLength="3"
+                    name='from'
+                    type='text'
+                    id='from'
+                    maxLength='3'
                     // label="Password"
-                    placeholder="From"
+                    placeholder='From'
                     required
                     component={CustomInput}
                   ></Field>
                 </fieldset>
                 <fieldset>
                   <Field
-                    name="to"
-                    type="text"
-                    id="to"
-                    maxLength="3"
+                    name='to'
+                    type='text'
+                    id='to'
+                    maxLength='3'
                     // label="Password"
-                    placeholder="To"
+                    placeholder='To'
                     required
                     component={CustomInput}
                   ></Field>
                 </fieldset>
                 <fieldset>
                   <Field
-                    name="date"
-                    type="date"
-                    id="date"
+                    name='date'
+                    type='date'
+                    id='date'
                     // label="Confirm Password"
-                    placeholder="Journey date"
+                    placeholder='Journey date'
                     required
                     component={CustomInput}
                   ></Field>
                 </fieldset>
                 {this.props.errorMessage ? (
-                  <Alert variant="danger">{this.props.errorMessage} </Alert>
+                  <Alert variant='danger'>{this.props.errorMessage} </Alert>
                 ) : null}
-                <Button variant="primary" type="submit">
+                <Button variant='primary' type='submit'>
                   Search
                 </Button>
               </form>
             </Card.Body>
           </Card>
         </div>
-        <div className="col">
+        <div className='col'>
           <Table>
-            {this.state.flights}
-            {this.state.flights.map((item) => (
-              <tr key={item.OrderID}>{item.CustomerID}</tr>
-            ))}
+            <tbody>
+              {this.state.flights.map((item) => (
+                <tr key={item._id}>{item.CustomerID}</tr>
+              ))}
+            </tbody>
           </Table>
         </div>
       </div>
@@ -111,5 +112,5 @@ function mapStateToProps(state) {
 
 export default compose(
   connect(mapStateToProps, actions),
-  reduxForm({ form: "search" })
+  reduxForm({ form: 'search' })
 )(Home);
