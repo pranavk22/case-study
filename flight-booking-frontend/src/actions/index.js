@@ -8,6 +8,7 @@ import {
   SEARCH_FLIGHT,
   FLIGHT_ERROR,
   BOOK_FLIGHT,
+  CLEAR_FLIGHT,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -160,6 +161,9 @@ export const signOut = () => {
     dispatch({
       type: AUTH_SIGN_OUT,
       payload: "",
+    });
+    dispatch({
+      type: CLEAR_FLIGHT
     });
   };
 };

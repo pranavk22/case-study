@@ -6,3 +6,4 @@ export const GET_SECRET = "GET_SECRET";
 export const FLIGHT_ERROR = "FLIGHT_ERROR";
 export const SEARCH_FLIGHT = "SEARCH_FLIGHT";
 export const BOOK_FLIGHT = "BOOK_FLIGHT";
+export const CLEAR_FLIGHT = "CLEAR_FLIGHT";
