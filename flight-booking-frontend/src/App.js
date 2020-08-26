@@ -37,8 +37,8 @@ function App() {
       <BrowserRouter>
         <div>
           <Header />
+          <Route path="/" exact strict component={Home} />
           <div className="container">
-            <Route path="/" exact strict component={Home} />
             <Route path="/signup" exact strict component={SignUp} />
             <Route path="/signin" exact strict component={SignIn} />
             <Route

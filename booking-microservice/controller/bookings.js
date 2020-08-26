@@ -8,7 +8,7 @@ module.exports = {
     res.status(200).json(bookings);
   },
 
-  getBookingById :async (req, res, next) => {
+  getBookingById: async (req, res, next) => {
     const { bookingId } = req.params;
     const booking = await Booking.findById(bookingId);
     res.status(200).json(booking);
@@ -33,12 +33,18 @@ module.exports = {
     const userId = req.body.user;
     const flightId = req.body.flight;
     const { bookingId } = req.params;
-    console.log(bookingId)
+    console.log(bookingId);
     const result = await Booking.findByIdAndDelete(bookingId);
     const user = await User.findById(userId);
     const flight = await Flight.findById(flightId);
     user.flights.pull(flight);
     await user.save();
     res.status(200).json({ success: "true" });
+  },
+
+  getUserDetailFlights: async (req, res, next) => {
+    const { userDetailId } = req.params;
+    const userDetails = await User.findById(userDetailId).populate("flights");
+    res.status(200).json(userDetails.flights);
   },
 };

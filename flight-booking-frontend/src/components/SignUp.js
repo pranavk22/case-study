@@ -61,7 +61,6 @@ class SignUp extends Component {
                     id="email"
                     label="Email address"
                     placeholder="Enter email"
-                    // pattern="/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/"
                     required
                     component={CustomInput}
                   ></Field>

@@ -5,6 +5,8 @@ import {
   AUTH_SIGN_OUT,
   AUTH_SIGN_IN,
   GET_SECRET,
+  SEARCH_FLIGHT,
+  FLIGHT_ERROR,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -148,5 +150,29 @@ export const signOut = () => {
       type: AUTH_SIGN_OUT,
       payload: "",
     });
+  };
+};
+
+export const searchFlight = (data) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:9000/flights/search",
+        data
+      );
+      console.log(res.data);
+
+      dispatch({
+        type: SEARCH_FLIGHT,
+        payload: res.data,
+      });
+      return res.data;
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "Could not get any flights",
+      });
+      console.log(error);
+    }
   };
 };

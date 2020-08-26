@@ -2,21 +2,23 @@ const router = require("express-promise-router")();
 const UserDetailsController = require("../controller/userDetails");
 
 router
-  .route("/")
-  .get(UserDetailsController.getAllUsers)
-  .post(UserDetailsController.addNewUser);
+  .route("/:userId")
+  .get(UserDetailsController.getAllUserDetails)
+  .post(UserDetailsController.addNewUserDetail);
 
 router
-  .route("/:userId")
-  .get(UserDetailsController.getUser)
-  .delete(UserDetailsController.deleteUser)
-  .put(UserDetailsController.replaceUser);
+  .route("/:userDetailId")
+  .get(UserDetailsController.getUserDetail)
+  .delete(UserDetailsController.deleteUserDetail)
+  .put(UserDetailsController.replaceUserDetail);
 
-router.route("/:userId/flights").get(UserDetailsController.getUserFlights);
+// router
+//   .route("/:userDetailId/flights")
+//   .get(UserDetailsController.getUserDetailFlights);
 //   .post(UsersController.addUserFlight);
 
 // router
-//   .route("/:userId/flights/:flightId")
+//   .route("/:userDetailId/flights/:flightId")
 //   .post(UsersController.addUserFlightById)
 //   .delete(UsersController.cancelUserFlightById);
 
