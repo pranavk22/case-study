@@ -27,9 +27,9 @@ class Header extends Component {
             <Nav className="mr-auto">
               <Nav.Link
                 className="d-inline p-2 bg-primary text-white"
-                href="/secret"
+                href="/myflights"
               >
-                Secret Page
+                My Flights
               </Nav.Link>
             </Nav>
           ) : null}
