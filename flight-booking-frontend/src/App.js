@@ -10,8 +10,8 @@ import Home from "./components/Home";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import BookFlight from "./components/BookFlight";
-import LoginOptions from "./components/LoginOptions";
 import SecretPage from "./components/SecretPage";
+import SuccessPage from "./components/SuccessPage";
 import reducers from "./reducers";
 
 import authGuard from "./components/authGuard";
@@ -40,14 +40,19 @@ function App() {
         <div>
           <Header />
           <Route path="/" exact strict component={Home} />
-          <Route
-            path="/book/:flightId"
-            exact
-            strict
-            component={authGuard(BookFlight)}
-          />
-          <Route path="/loginoptions" exact strict component={LoginOptions} />
           <div className="container">
+            <Route
+              path="/book"
+              exact
+              strict
+              component={authGuard(BookFlight)}
+            />
+            <Route
+              path="/successpage"
+              exact
+              strict
+              component={authGuard(SuccessPage)}
+            />
             <Route path="/signup" exact strict component={SignUp} />
             <Route path="/signin" exact strict component={SignIn} />
             <Route

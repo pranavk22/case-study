@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Alert, Card, Modal } from "react-bootstrap";
+import { Button, Alert, Card, Modal, Breadcrumb } from "react-bootstrap";
 import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -29,11 +29,13 @@ export class Home extends Component {
   }
 
   bookNow(flightId) {
+    this.props.storeFlight(flightId);
+
     if (!this.props.isAuth) {
-      this.props.storeFlightId(flightId);
+      // this.props.storeFlight(flightId);
       this.handleShow();
     } else {
-      this.props.history.push("/book/" + flightId);
+      this.props.history.push("/book");
     }
   }
 
@@ -42,11 +44,11 @@ export class Home extends Component {
 
   handleSignIn = () => {
     this.props.history.push("/signin");
-  }
+  };
 
   handleSignUp = () => {
     this.props.history.push("/signup");
-  }
+  };
 
   render() {
     const { handleSubmit } = this.props;
@@ -54,8 +56,10 @@ export class Home extends Component {
     return (
       <div className="row">
         <div className="col" style={{ marginLeft: "2rem", columnWidth: "30%" }}>
+          <Breadcrumb>
+            <Breadcrumb.Item active>Search Flight</Breadcrumb.Item>
+          </Breadcrumb>
           <Card>
-            <Card.Header>Search Flight</Card.Header>
             <Card.Body>
               <form onSubmit={handleSubmit(this.onSubmit)}>
                 <fieldset>
@@ -64,7 +68,7 @@ export class Home extends Component {
                     type="text"
                     id="from"
                     maxLength="3"
-                    // label="Password"
+                    label="Source"
                     placeholder="From"
                     required
                     component={CustomInput}
@@ -77,7 +81,7 @@ export class Home extends Component {
                     type="text"
                     id="to"
                     maxLength="3"
-                    // label="Password"
+                    label="Destination"
                     placeholder="To"
                     required
                     component={CustomInput}
@@ -89,7 +93,7 @@ export class Home extends Component {
                     type="date"
                     id="date"
                     // label="Confirm Password"
-                    placeholder="Journey date"
+                    label="Journey date"
                     required
                     component={CustomInput}
                   ></Field>
@@ -115,9 +119,9 @@ export class Home extends Component {
               <Card.Body>
                 <Card.Title>{flight.airlines}</Card.Title>
                 <Card.Text>
-                  From: {flight.from} To: {flight.to}
+                  From : {flight.from} To : {flight.to}
                   <br />
-                  Price:&#8377;{flight.fare}
+                  Fare : &#8377;{flight.fare}
                 </Card.Text>
                 <Button
                   variant="primary"

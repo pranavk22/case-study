@@ -16,6 +16,13 @@ class SignIn extends Component {
     this.responseGoogle = this.responseGoogle.bind(this);
     this.responseFacebook = this.responseFacebook.bind(this);
   }
+
+  redirect() {
+    if (this.props.flight.hasOwnProperty("_id")) {
+      this.props.history.push("/book");
+    } else this.props.history.push("/");
+  }
+
   async onSubmit(formData) {
     console.log(formData);
     const res = await this.props.validateSignIn(formData);
@@ -24,21 +31,16 @@ class SignIn extends Component {
       await this.props.signIn(formData);
     }
     if (!this.props.errorMessage) {
-      if(this.props.flightId)
-        this.props.history.push("/book/" + this.props.flightId);
-        else this.props.history.push("/");
+      this.redirect();
     }
   }
 
   async responseFacebook(response) {
     console.log(response);
-    console.log(this.props.flightId);
+    console.log(this.props.flight);
     await this.props.oauthFacebook(response.accessToken);
     if (!this.props.errorMessage) {
-      console.log(this.props.flightId);
-      if (this.props.flightId) {
-        this.props.history.push("/book/" + this.props.flightId);
-      } else this.props.history.push("/");
+      this.redirect();
     }
   }
 
@@ -46,9 +48,7 @@ class SignIn extends Component {
     console.log(response);
     await this.props.oauthGoogle(response.accessToken);
     if (!this.props.errorMessage) {
-      if(this.props.flightId)
-        this.props.history.push("/book/" + this.props.flightId);
-        else this.props.history.push("/");
+      this.redirect();
     }
   }
 
@@ -140,7 +140,7 @@ class SignIn extends Component {
 function mapStateToProps(state) {
   return {
     errorMessage: state.auth.errorMessage,
-    flightId: state.flight.flightId,
+    flight: state.flight.flight,
   };
 }
 

@@ -17,6 +17,12 @@ class SignUp extends Component {
     this.responseFacebook = this.responseFacebook.bind(this);
   }
 
+  redirect() {
+    if (this.props.flight.hasOwnProperty("_id")) {
+      this.props.history.push("/book");
+    } else this.props.history.push("/");
+  }
+
   async onSubmit(formData) {
     console.log(formData);
     const res = await this.props.validateSignUp(formData);
@@ -25,15 +31,16 @@ class SignUp extends Component {
       await this.props.signUp(formData);
     }
     if (!this.props.errorMessage) {
-      this.props.history.push("/");
+      this.redirect();
     }
   }
 
   async responseFacebook(response) {
     console.log(response);
+    console.log(this.props.flight);
     await this.props.oauthFacebook(response.accessToken);
     if (!this.props.errorMessage) {
-      this.props.history.push("/");
+      this.redirect();
     }
   }
 
@@ -41,10 +48,9 @@ class SignUp extends Component {
     console.log(response);
     await this.props.oauthGoogle(response.accessToken);
     if (!this.props.errorMessage) {
-      this.props.history.push("/");
+      this.redirect();
     }
   }
-
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -143,6 +149,7 @@ class SignUp extends Component {
 function mapStateToProps(state) {
   return {
     errorMessage: state.auth.errorMessage,
+    flight: state.flight.flight,
   };
 }
 

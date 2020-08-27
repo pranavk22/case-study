@@ -9,6 +9,9 @@ import {
   FLIGHT_ERROR,
   BOOK_FLIGHT,
   CLEAR_FLIGHT,
+  FETCH_USER_DETAILS,
+  USER_DETAILS_ERROR,
+  FLIGHT_BOOK,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -34,10 +37,10 @@ export const oauthFacebook = (data) => {
     const res = await axios.post("http://localhost:9300/facebook", {
       access_token: data,
     });
-    console.log(res);
+    console.log(res.data.newUser.userDetails);
     dispatch({
       type: AUTH_SIGN_UP,
-      payload: res.data.token,
+      payload: res.data,
     });
     localStorage.setItem("JWT_TOKEN", res.data.token);
     const authHeader = "Bearer " + res.data.token;
@@ -56,7 +59,7 @@ export const signUp = (data) => {
       console.log(res);
       dispatch({
         type: AUTH_SIGN_UP,
-        payload: res.data.token,
+        payload: res.data,
       });
 
       localStorage.setItem("JWT_TOKEN", res.data.token);
@@ -79,7 +82,7 @@ export const signIn = (data) => {
       console.log(res);
       dispatch({
         type: AUTH_SIGN_IN,
-        payload: res.data.token,
+        payload: res.data,
       });
 
       localStorage.setItem("JWT_TOKEN", res.data.token);
@@ -129,13 +132,24 @@ export const validateSignIn = (data) => {
   };
 };
 
-export const storeFlightId = (flightId) => {
+export const storeFlight = (flightId) => {
   console.log(flightId);
-  return (dispatch) => {
-    dispatch({
-      type: BOOK_FLIGHT,
-      payload: flightId,
-    });
+  return async (dispatch) => {
+    try {
+      const res = await axios.get("http://localhost:9000/flights/" + flightId);
+      console.log(res.data);
+      const flight = res.data;
+      dispatch({
+        type: BOOK_FLIGHT,
+        payload: flight,
+      });
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "No flight found for given id",
+      });
+      console.log(error);
+    }
   };
 };
 
@@ -163,7 +177,7 @@ export const signOut = () => {
       payload: "",
     });
     dispatch({
-      type: CLEAR_FLIGHT
+      type: CLEAR_FLIGHT,
     });
   };
 };
@@ -186,6 +200,70 @@ export const searchFlight = (data) => {
       dispatch({
         type: FLIGHT_ERROR,
         payload: "Could not get any flights",
+      });
+      console.log(error);
+    }
+  };
+};
+
+export const addUserDetails = (userId, formData) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:9200/users/" + userId,
+        formData
+      );
+      console.log(res.data);
+      // return res.data;
+    } catch (error) {
+      dispatch({
+        type: USER_DETAILS_ERROR,
+        payload: "Adding passenger failed",
+      });
+      console.log(error);
+    }
+  };
+};
+
+export const fetchUserDetails = (userId) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.get("http://localhost:9200/users/" + userId);
+      console.log(res.data);
+
+      dispatch({
+        type: FETCH_USER_DETAILS,
+        payload: res.data,
+      });
+      // return res.data;
+    } catch (error) {
+      dispatch({
+        type: USER_DETAILS_ERROR,
+        payload: "Could not get passenger details",
+      });
+      console.log(error);
+    }
+  };
+};
+
+export const bookFlight = (user, flight) => {
+  return async (dispatch) => {
+    try {
+      console.log(user, flight);
+      const res = await axios.post("http://localhost:9100/bookings", {
+        user,
+        flight,
+      });
+      dispatch({
+        type: FLIGHT_BOOK,
+        payload: res.data,
+      });
+      console.log(res.data);
+      // return res.data;
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "Booking failed",
       });
       console.log(error);
     }

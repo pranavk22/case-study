@@ -17,7 +17,7 @@ module.exports = {
   addNewBooking: async (req, res, next) => {
     const userId = req.body.user;
     const flightId = req.body.flight;
-    // console.log(userId, flightId);
+    console.log(userId, flightId);
     // const newBooking = new Booking({ userId, flightId });
     // const booking = await newBooking.save();
     const flight = await Flight.findById(flightId);
@@ -26,7 +26,8 @@ module.exports = {
     await user.save();
     const newBooking = new Booking({ flight, user });
     const booking = await newBooking.save();
-    res.status(201).json({ success: "true" });
+    console.log(booking);
+    res.status(201).json({ booking });
   },
 
   cancelBooking: async (req, res, next) => {

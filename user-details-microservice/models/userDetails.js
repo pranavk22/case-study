@@ -14,11 +14,6 @@ var userDetailsSchema = new Schema({
     type: Date,
     required: true,
   },
-  gender: {
-    type: String,
-    enum: ['M', 'F'],
-    required: true,
-  },
   flights: [
     {
       type: Schema.Types.ObjectId,
