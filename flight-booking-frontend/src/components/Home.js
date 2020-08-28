@@ -27,7 +27,7 @@ export class Home extends Component {
     //   this.props.history.push("/");
     // }
   }
-
+  
   bookNow(flightId) {
     this.props.storeFlight(flightId);
 
@@ -74,7 +74,9 @@ export class Home extends Component {
                     component={CustomInput}
                   ></Field>
                 </fieldset>
-
+                <Button style={{textAlignLast: 'center', width: '100%'}} onClick={()=>{}}>
+                  <b>↑↓</b>
+                </Button>
                 <fieldset>
                   <Field
                     name="to"
