@@ -121,9 +121,8 @@ export class Home extends Component {
               <Card.Body>
                 <Card.Title>{flight.airlines}</Card.Title>
                 <Card.Text>
-                  From : {flight.from} To : {flight.to}
-                  <br />
-                  Fare : &#8377;{flight.fare}
+                  <span style={{textAlign: 'start'}}>From : {flight.from} To : {flight.to}</span>
+                  <span style={{float: 'right'}}>Fare : &#8377;{flight.fare}</span>                  
                 </Card.Text>
                 <Button
                   variant="primary"
