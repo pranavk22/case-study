@@ -27,7 +27,7 @@ export class Home extends Component {
     //   this.props.history.push("/");
     // }
   }
-
+  
   bookNow(flightId) {
     this.props.storeFlight(flightId);
 
@@ -74,7 +74,9 @@ export class Home extends Component {
                     component={CustomInput}
                   ></Field>
                 </fieldset>
-
+                <Button style={{textAlignLast: 'center', width: '100%'}} onClick={()=>{}}>
+                  <b>↑↓</b>
+                </Button>
                 <fieldset>
                   <Field
                     name="to"
@@ -119,9 +121,8 @@ export class Home extends Component {
               <Card.Body>
                 <Card.Title>{flight.airlines}</Card.Title>
                 <Card.Text>
-                  From : {flight.from} To : {flight.to}
-                  <br />
-                  Fare : &#8377;{flight.fare}
+                  <span style={{textAlign: 'start'}}>From : {flight.from} To : {flight.to}</span>
+                  <span style={{float: 'right'}}>Fare : &#8377;{flight.fare}</span>                  
                 </Card.Text>
                 <Button
                   variant="primary"

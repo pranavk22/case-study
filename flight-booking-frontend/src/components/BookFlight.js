@@ -3,6 +3,7 @@ import { Button, Alert, Card, Modal, Breadcrumb, Table } from "react-bootstrap";
 import { reduxForm, Field } from "redux-form";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import * as actions from "../actions";
 import CustomInput from "./CustomInput";
@@ -61,7 +62,7 @@ class BookFlight extends Component {
     return (
       <div>
         <Breadcrumb>
-          <Breadcrumb.Item href="/">Search Flight</Breadcrumb.Item>
+          <Breadcrumb.Item><Link to="/">Search Flight</Link></Breadcrumb.Item>
           <Breadcrumb.Item active>Traveller Details</Breadcrumb.Item>
         </Breadcrumb>
         {this.state.userDetails.hasOwnProperty("_id") ? (
@@ -232,8 +233,10 @@ class BookFlight extends Component {
           <Card>
             <Card.Body>
               <Card.Text>You have not selected any flight to book</Card.Text>
-              <Button variant="primary" href="/">
+              <Button variant="primary">
+                <Link to='/' style={{ color: 'inherit', textDecoration: 'inherit'}} >
                 Search flight
+                </Link>
               </Button>
             </Card.Body>
           </Card>

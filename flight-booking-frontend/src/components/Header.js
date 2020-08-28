@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Navbar, Nav, Modal, Button } from "react-bootstrap";
 import * as actions from "../actions";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 class Header extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class Header extends Component {
     return (
       <>
         <Navbar bg="primary" variant="dark" style={{ marginBottom: "30px" }}>
-          <Navbar.Brand href="/">Flight Booking System</Navbar.Brand>
+          <Navbar.Brand><Link to="/" style={{ color: 'inherit', textDecoration: 'inherit'}}>Flight Booking System</Link></Navbar.Brand>
           {this.props.isAuth ? (
             <Nav className="mr-auto">
               <Nav.Link
