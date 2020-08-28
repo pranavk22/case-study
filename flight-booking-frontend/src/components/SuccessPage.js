@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Jumbotron, Button } from "react-bootstrap";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 class SuccessPage extends Component {
   constructor(props) {
@@ -25,8 +26,8 @@ class SuccessPage extends Component {
             <h1>Booking failed!</h1>
             <p>Please try again</p>
             <p>
-              <Button href="/" variant="primary">
-                Search flight
+              <Button variant="primary">
+                <Link to="/">Search Flight</Link>
               </Button>
             </p>
           </Jumbotron>
