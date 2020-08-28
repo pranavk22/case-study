@@ -11,10 +11,12 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import BookFlight from "./components/BookFlight";
 import MyFlights from "./components/MyFlights";
+import Flights from "./components/Flights";
 import SuccessPage from "./components/SuccessPage";
 import reducers from "./reducers";
 
 import authGuard from "./components/authGuard";
+import adminGuard from "./components/adminGuard";
 
 const jwtToken = localStorage.getItem("JWT_TOKEN");
 const authHeader = "Bearer " + jwtToken;
@@ -41,6 +43,13 @@ function App() {
           <Header />
           <Route path="/" exact strict component={Home} />
           <div className="container">
+            <Route
+              path="/flights"
+              exact
+              strict
+              component={adminGuard(Flights)}
+            />
+
             <Route
               path="/book"
               exact

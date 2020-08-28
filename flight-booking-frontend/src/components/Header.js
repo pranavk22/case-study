@@ -1,20 +1,24 @@
 import React, { Component } from "react";
 import { Navbar, Nav, Modal, Button } from "react-bootstrap";
 import * as actions from "../actions";
+import { withRouter } from "react-router-dom";
+import { compose } from "redux";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.signOut = this.signOut.bind(this);
     this.state = { show: false };
+    console.log(this.props.user);
   }
 
   signOut() {
     console.log("Called signout");
     this.handleClose();
     this.props.signOut();
+    this.props.history.push("/");
   }
 
   handleClose = () => this.setState({ show: false });
@@ -23,18 +27,37 @@ class Header extends Component {
     return (
       <>
         <Navbar bg="primary" variant="dark" style={{ marginBottom: "30px" }}>
-          <Navbar.Brand><Link to="/" style={{ color: 'inherit', textDecoration: 'inherit'}}>Flight Booking System</Link></Navbar.Brand>
-          {this.props.isAuth ? (
-            <Nav className="mr-auto">
-              <Nav.Link
-                className="d-inline p-2 bg-primary text-white"
-                href="/myflights"
+          <Navbar.Brand>
+            {!this.props.user || this.props.user.userType === "user" ? (
+              <NavLink
+                to="/"
+                style={{ color: "inherit", textDecoration: "inherit" }}
               >
-                My Flights
-              </Nav.Link>
+                Flight Booking System
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/flights"
+                className="d-inline p-2 bg-primary text-white"
+                style={{ color: "inherit", textDecoration: "inherit" }}
+              >
+                Flight Booking System
+              </NavLink>
+            )}
+          </Navbar.Brand>
+          {this.props.user ? (
+            <Nav className="mr-auto">
+              {this.props.isAuth && this.props.user.userType === "user" ? (
+                <NavLink
+                  to="/myflights"
+                  className="d-inline p-2 bg-primary text-white"
+                  style={{ color: "inherit", textDecoration: "inherit" }}
+                >
+                  My Flights
+                </NavLink>
+              ) : null}
             </Nav>
           ) : null}
-
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
@@ -43,18 +66,20 @@ class Header extends Component {
             <Nav>
               {!this.props.isAuth ? (
                 <>
-                  <Nav.Link
+                  <NavLink
                     className="d-inline p-2 bg-primary text-white"
-                    href="/signup"
+                    style={{ color: "inherit", textDecoration: "inherit" }}
+                    to="/signup"
                   >
                     Sign up
-                  </Nav.Link>
-                  <Nav.Link
+                  </NavLink>
+                  <NavLink
                     className="d-inline p-2 bg-primary text-white"
-                    href="/signin"
+                    style={{ color: "inherit", textDecoration: "inherit" }}
+                    to="/signin"
                   >
                     Sign in
-                  </Nav.Link>
+                  </NavLink>
                 </>
               ) : null}
               {this.props.isAuth ? (
@@ -90,7 +115,8 @@ class Header extends Component {
 function mapStateToProps(state) {
   return {
     isAuth: state.auth.isAuthenticated,
+    user: state.auth.user,
   };
 }
 
-export default connect(mapStateToProps, actions)(Header);
+export default compose(withRouter, connect(mapStateToProps, actions))(Header);

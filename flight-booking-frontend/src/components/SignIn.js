@@ -18,9 +18,13 @@ class SignIn extends Component {
   }
 
   redirect() {
-    if (this.props.flight.hasOwnProperty("_id")) {
-      this.props.history.push("/book");
-    } else this.props.history.push("/");
+    if (this.props.user.userType == "admin") {
+      this.props.history.push("/flights");
+    } else {
+      if (this.props.flight.hasOwnProperty("_id")) {
+        this.props.history.push("/book");
+      } else this.props.history.push("/");
+    }
   }
 
   async onSubmit(formData) {
@@ -145,6 +149,7 @@ function mapStateToProps(state) {
   return {
     errorMessage: state.auth.errorMessage,
     flight: state.flight.flight,
+    user: state.auth.user,
   };
 }
 

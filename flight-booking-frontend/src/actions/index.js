@@ -174,7 +174,7 @@ export const signOut = () => {
 
     dispatch({
       type: AUTH_SIGN_OUT,
-      payload: "",
+      payload: {},
     });
     dispatch({
       type: CLEAR_FLIGHT,
