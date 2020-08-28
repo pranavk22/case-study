@@ -28,6 +28,7 @@ export default (state = DEFAULT_STATE, action) => {
     case FLIGHT_BOOK:
       return {
         ...state,
+        flights: [],
         booking: action.payload,
       };
     case CLEAR_FLIGHT:

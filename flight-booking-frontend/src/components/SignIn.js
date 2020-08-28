@@ -35,6 +35,10 @@ class SignIn extends Component {
     }
   }
 
+  handleSignIn = () => {
+    this.props.history.push("/signin");
+  };
+
   async responseFacebook(response) {
     console.log(response);
     console.log(this.props.flight);
@@ -96,7 +100,7 @@ class SignIn extends Component {
           <Card>
             <Card.Body>
               <Card.Text>Don't have an account?</Card.Text>
-              <Button variant="link" href="signup">
+              <Button variant="link" onClick={this.handleSignUp}>
                 Create account
               </Button>
             </Card.Body>

@@ -11,12 +11,19 @@ export class Home extends Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
-    this.state = { show: false };
+    this.state = { show: false, swap: false };
     // this.state = { flights: [] };
   }
 
   async onSubmit(formData) {
+    if (this.state.swap) {
+      const swapper = formData.from;
+      formData.from = formData.to;
+      formData.to = swapper;
+      this.setState({ swap: false });
+    }
     console.log(formData);
+
     await this.props.searchFlight(formData);
     // this.setState({ flights: flights });
     // console.log(this.state.flights);
@@ -27,7 +34,7 @@ export class Home extends Component {
     //   this.props.history.push("/");
     // }
   }
-  
+
   bookNow(flightId) {
     this.props.storeFlight(flightId);
 
@@ -39,6 +46,7 @@ export class Home extends Component {
     }
   }
 
+  handleSwap = () => this.setState({ swap: !this.state.swap });
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
 
@@ -63,32 +71,63 @@ export class Home extends Component {
             <Card.Body>
               <form onSubmit={handleSubmit(this.onSubmit)}>
                 <fieldset>
-                  <Field
-                    name="from"
-                    type="text"
-                    id="from"
-                    maxLength="3"
-                    label="Source"
-                    placeholder="From"
-                    required
-                    component={CustomInput}
-                  ></Field>
+                  {!this.state.swap ? (
+                    <Field
+                      name="from"
+                      type="text"
+                      id="from"
+                      maxLength="3"
+                      label="Source"
+                      placeholder="From"
+                      required
+                      component={CustomInput}
+                    ></Field>
+                  ) : (
+                    <Field
+                      name="to"
+                      type="text"
+                      id="to"
+                      maxLength="3"
+                      label="Source"
+                      placeholder="From"
+                      required
+                      component={CustomInput}
+                    ></Field>
+                  )}
                 </fieldset>
-                <Button style={{textAlignLast: 'center', width: '100%'}} onClick={()=>{}}>
+
+                <Button
+                  style={{ textAlignLast: "center", width: "100%" }}
+                  onClick={() => this.handleSwap()}
+                >
                   <b>↑↓</b>
                 </Button>
                 <fieldset>
-                  <Field
-                    name="to"
-                    type="text"
-                    id="to"
-                    maxLength="3"
-                    label="Destination"
-                    placeholder="To"
-                    required
-                    component={CustomInput}
-                  ></Field>
+                  {!this.state.swap ? (
+                    <Field
+                      name="to"
+                      type="text"
+                      id="to"
+                      maxLength="3"
+                      label="Destination"
+                      placeholder="To"
+                      required
+                      component={CustomInput}
+                    ></Field>
+                  ) : (
+                    <Field
+                      name="from"
+                      type="text"
+                      id="from"
+                      maxLength="3"
+                      label="Destination"
+                      placeholder="To"
+                      required
+                      component={CustomInput}
+                    ></Field>
+                  )}
                 </fieldset>
+
                 <fieldset>
                   <Field
                     name="date"
@@ -121,8 +160,12 @@ export class Home extends Component {
               <Card.Body>
                 <Card.Title>{flight.airlines}</Card.Title>
                 <Card.Text>
-                  <span style={{textAlign: 'start'}}>From : {flight.from} To : {flight.to}</span>
-                  <span style={{float: 'right'}}>Fare : &#8377;{flight.fare}</span>                  
+                  <span style={{ textAlign: "start" }}>
+                    From : {flight.from} To : {flight.to}
+                  </span>
+                  <span style={{ float: "right" }}>
+                    Fare : &#8377;{flight.fare}
+                  </span>
                 </Card.Text>
                 <Button
                   variant="primary"
