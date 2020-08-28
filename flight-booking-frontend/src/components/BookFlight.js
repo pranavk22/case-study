@@ -39,6 +39,10 @@ class BookFlight extends Component {
   async loadPassengers() {
     if (this.props.user) {
       await this.props.fetchUserDetails(this.props.user._id);
+      console.log(this.props.userDetails.length);
+      if (this.props.userDetails.length === 0) {
+        this.setState({ showForm: true });
+      }
     }
   }
 

@@ -23,6 +23,10 @@ class SignUp extends Component {
     } else this.props.history.push("/");
   }
 
+  handleSignIn = () => {
+    this.props.history.push("/signin");
+  };
+
   async onSubmit(formData) {
     console.log(formData);
     const res = await this.props.validateSignUp(formData);
@@ -105,7 +109,7 @@ class SignUp extends Component {
           <Card>
             <Card.Body>
               <Card.Text>Already have an account?</Card.Text>
-              <Button variant="link" href="/signin">
+              <Button variant="link" onClick={this.handleSignIn}>
                 Sign in
               </Button>
             </Card.Body>
