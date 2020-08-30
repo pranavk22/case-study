@@ -14,4 +14,7 @@ router
 router
   .route("/:userDetailId/flights")
   .get(BookingsController.getUserDetailFlights);
+
+router.route("/razorpay").post(BookingsController.payment);
+router.route("/verification").post(BookingsController.verifyPayment);
 module.exports = router;

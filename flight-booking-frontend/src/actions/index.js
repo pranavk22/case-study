@@ -12,6 +12,8 @@ import {
   FETCH_USER_DETAILS,
   USER_DETAILS_ERROR,
   FLIGHT_BOOK,
+  STORE_USER_DETAILS,
+  CLEAR_BOOKING,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -182,6 +184,24 @@ export const signOut = () => {
   };
 };
 
+export const storeUserDetails = (data) => {
+  return (dispatch) => {
+    console.log(data);
+    dispatch({
+      type: STORE_USER_DETAILS,
+      payload: data,
+    });
+  };
+};
+
+export const clearBooking = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_BOOKING,
+      payload: {},
+    });
+  };
+};
 export const searchFlight = (data) => {
   return async (dispatch) => {
     try {

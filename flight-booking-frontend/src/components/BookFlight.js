@@ -27,15 +27,17 @@ class BookFlight extends Component {
   async bookFlight(userDetails) {
     console.log(userDetails._id);
     await this.setState({ userDetails });
+    this.props.storeUserDetails(userDetails);
     this.handleShow();
   }
   async confirmFlight() {
-    console.log(this.state.userDetails._id);
-    await this.props.bookFlight(
-      this.state.userDetails._id,
-      this.props.flight._id
-    );
-    this.props.history.push("/successpage");
+    // console.log(this.state.userDetails._id);
+    // await this.props.bookFlight(
+    //   this.state.userDetails._id,
+    //   this.props.flight._id
+    // );
+    // this.props.history.push("/successpage");
+    this.props.history.push("/payments");
   }
   async loadPassengers() {
     if (this.props.user) {
@@ -62,7 +64,9 @@ class BookFlight extends Component {
     return (
       <div>
         <Breadcrumb>
-          <Breadcrumb.Item><Link to="/">Search Flight</Link></Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <Link to="/">Search Flight</Link>
+          </Breadcrumb.Item>
           <Breadcrumb.Item active>Traveller Details</Breadcrumb.Item>
         </Breadcrumb>
         {this.state.userDetails.hasOwnProperty("_id") ? (
@@ -234,8 +238,11 @@ class BookFlight extends Component {
             <Card.Body>
               <Card.Text>You have not selected any flight to book</Card.Text>
               <Button variant="primary">
-                <Link to='/' style={{ color: 'inherit', textDecoration: 'inherit'}} >
-                Search flight
+                <Link
+                  to="/"
+                  style={{ color: "inherit", textDecoration: "inherit" }}
+                >
+                  Search flight
                 </Link>
               </Button>
             </Card.Body>

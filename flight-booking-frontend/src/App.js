@@ -12,6 +12,7 @@ import SignUp from "./components/SignUp";
 import BookFlight from "./components/BookFlight";
 import MyFlights from "./components/MyFlights";
 import Flights from "./components/Flights";
+import Payments from "./components/Payments";
 import SuccessPage from "./components/SuccessPage";
 import reducers from "./reducers";
 
@@ -55,6 +56,12 @@ function App() {
               exact
               strict
               component={authGuard(BookFlight)}
+            />
+            <Route
+              path="/payments"
+              exact
+              strict
+              component={authGuard(Payments)}
             />
             <Route
               path="/successpage"
