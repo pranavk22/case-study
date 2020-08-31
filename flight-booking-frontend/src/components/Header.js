@@ -49,11 +49,11 @@ class Header extends Component {
             <Nav className="mr-auto">
               {this.props.isAuth && this.props.user.userType === "user" ? (
                 <NavLink
-                  to="/myflights"
+                  to="/mybookings"
                   className="d-inline p-2 bg-primary text-white"
                   style={{ color: "inherit", textDecoration: "inherit" }}
                 >
-                  My Flights
+                  My Bookings
                 </NavLink>
               ) : null}
             </Nav>

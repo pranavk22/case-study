@@ -64,7 +64,7 @@ function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature);
         console.log(userDetails._id);
-
+        await clearBooking();
         await bookFlight(userDetails, flight);
         history.push("/successpage");
       },

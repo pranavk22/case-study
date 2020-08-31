@@ -15,6 +15,7 @@ import {
   STORE_USER_DETAILS,
   CLEAR_BOOKING,
   GET_BOOKINGS,
+  CANCEL_BOOKING,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -210,8 +211,11 @@ export const cancelBooking = (bookingId) => {
       const res = await axios.delete(
         "http://localhost:9100/bookings/" + bookingId
       );
-      console.log(res.data);
-
+      console.log(res.data.success);
+      dispatch({
+        type: CANCEL_BOOKING,
+        payload: res.data.success,
+      });
       // return res.data;
     } catch (error) {
       dispatch({

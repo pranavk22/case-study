@@ -20,7 +20,7 @@ class SuccessPage extends Component {
                 <p>
                   <Button variant="primary">
                     <Link
-                      to="/"
+                      to="/mybookings"
                       style={{ color: "inherit", textDecoration: "inherit" }}
                     >
                       View all bookings
@@ -54,6 +54,7 @@ class SuccessPage extends Component {
 function mapStateToProps(state) {
   return {
     booking: state.flight.booking,
+    cancelBooking: state.flight.cancelBooking,
   };
 }
 

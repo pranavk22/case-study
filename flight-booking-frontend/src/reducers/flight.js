@@ -7,6 +7,7 @@ import {
   STORE_USER_DETAILS,
   CLEAR_BOOKING,
   GET_BOOKINGS,
+  CANCEL_BOOKING,
 } from "../actions/types";
 
 const DEFAULT_STATE = {
@@ -15,6 +16,7 @@ const DEFAULT_STATE = {
   booking: {},
   bookings: [],
   userDetails: {},
+  cancelBooking: false,
   errorMessage: "",
 };
 
@@ -44,7 +46,13 @@ export default (state = DEFAULT_STATE, action) => {
     case CLEAR_BOOKING:
       return {
         ...state,
+        cancelBooking: false,
         booking: action.payload,
+      };
+    case CANCEL_BOOKING:
+      return {
+        ...state,
+        cancelBooking: true,
       };
     case STORE_USER_DETAILS:
       return {
