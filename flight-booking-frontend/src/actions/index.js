@@ -14,6 +14,7 @@ import {
   FLIGHT_BOOK,
   STORE_USER_DETAILS,
   CLEAR_BOOKING,
+  GET_BOOKINGS,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -202,6 +203,26 @@ export const clearBooking = () => {
     });
   };
 };
+
+export const cancelBooking = (bookingId) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.delete(
+        "http://localhost:9100/bookings/" + bookingId
+      );
+      console.log(res.data);
+
+      // return res.data;
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "Could not cancel booking",
+      });
+      console.log(error);
+    }
+  };
+};
+
 export const searchFlight = (data) => {
   return async (dispatch) => {
     try {
@@ -260,6 +281,28 @@ export const fetchUserDetails = (userId) => {
       dispatch({
         type: USER_DETAILS_ERROR,
         payload: "Could not get passenger details",
+      });
+      console.log(error);
+    }
+  };
+};
+
+export const getBookings = (userDetailId) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.get(
+        "http://localhost:9100/bookings/userDetails/" + userDetailId
+      );
+      console.log(res.data);
+      dispatch({
+        type: GET_BOOKINGS,
+        payload: res.data,
+      });
+      return res.data;
+    } catch (error) {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "Could not get booking details",
       });
       console.log(error);
     }

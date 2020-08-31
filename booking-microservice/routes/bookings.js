@@ -12,8 +12,8 @@ router
   .delete(BookingsController.cancelBooking);
 
 router
-  .route("/:userDetailId/flights")
-  .get(BookingsController.getUserDetailFlights);
+  .route("/userDetails/:userDetailId")
+  .get(BookingsController.getUserDetailBookings);
 
 router.route("/razorpay").post(BookingsController.payment);
 router.route("/verification").post(BookingsController.verifyPayment);

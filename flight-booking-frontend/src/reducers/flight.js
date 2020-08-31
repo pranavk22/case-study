@@ -6,12 +6,14 @@ import {
   FLIGHT_BOOK,
   STORE_USER_DETAILS,
   CLEAR_BOOKING,
+  GET_BOOKINGS,
 } from "../actions/types";
 
 const DEFAULT_STATE = {
   flights: [],
   flight: {},
   booking: {},
+  bookings: [],
   userDetails: {},
   errorMessage: "",
 };
@@ -33,6 +35,11 @@ export default (state = DEFAULT_STATE, action) => {
         ...state,
         flights: [],
         booking: action.payload,
+      };
+    case GET_BOOKINGS:
+      return {
+        ...state,
+        bookings: action.payload,
       };
     case CLEAR_BOOKING:
       return {

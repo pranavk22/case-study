@@ -63,7 +63,7 @@ export class Home extends Component {
 
     return (
       <div className="row">
-        <div className="col" style={{ marginLeft: "2rem", columnWidth: "30%" }}>
+        <div className="col" style={{ marginLeft: "2rem" }}>
           <Breadcrumb>
             <Breadcrumb.Item active>Search Flight</Breadcrumb.Item>
           </Breadcrumb>
@@ -149,10 +149,7 @@ export class Home extends Component {
             </Card.Body>
           </Card>
         </div>
-        <div
-          className="col"
-          style={{ columnWidth: "70%", marginRight: "2rem" }}
-        >
+        <div className="col" style={{ marginRight: "2rem" }}>
           {/* <CardDeck> */}
           {this.props.flights.map((flight) => (
             <Card key={flight._id} style={{ marginBottom: "2rem" }}>
@@ -169,8 +166,8 @@ export class Home extends Component {
                             <svg
                               clip-rule="evenodd"
                               fill-rule="evenodd"
-                              height="60"
-                              width="60"
+                              height="50"
+                              width="50"
                               image-rendering="optimizeQuality"
                               shape-rendering="geometricPrecision"
                               text-rendering="geometricPrecision"

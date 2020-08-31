@@ -79,15 +79,15 @@ function Payments({ flight, user, userDetails, bookFlight, clearBooking }) {
     <div>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to="/">Search Flight</Link>
+          <Link to="/">Search Flights</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
           <Link to="/book">Traveller Details</Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item active>Payments</Breadcrumb.Item>
+        <Breadcrumb.Item active>Payment</Breadcrumb.Item>
       </Breadcrumb>
       <Jumbotron>
-        <h1>Pay {fare}</h1>
+        <h4>Pay {fare}</h4>
         <p>
           <Button onClick={displayRazorpay} variant="primary">
             Pay now

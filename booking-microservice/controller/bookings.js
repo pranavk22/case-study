@@ -15,7 +15,7 @@ var instance = new Razorpay({
 
 module.exports = {
   getAllBookings: async (req, res, next) => {
-    const bookings = await Booking.find();
+    const bookings = await Booking.find().populate("flight").populate("user");
     res.status(200).json(bookings);
   },
 
@@ -48,10 +48,11 @@ module.exports = {
   },
 
   cancelBooking: async (req, res, next) => {
-    const userId = req.body.user;
-    const flightId = req.body.flight;
     const { bookingId } = req.params;
-    console.log(bookingId);
+    const booking = await Booking.findById(bookingId);
+    const userId = booking.user;
+    const flightId = booking.flight;
+    console.log(bookingId, userId, flightId);
     const result = await Booking.findByIdAndDelete(bookingId);
     const user = await User.findById(userId);
     const flight = await Flight.findById(flightId);
@@ -60,10 +61,12 @@ module.exports = {
     res.status(200).json({ success: "true" });
   },
 
-  getUserDetailFlights: async (req, res, next) => {
+  getUserDetailBookings: async (req, res, next) => {
     const { userDetailId } = req.params;
-    const userDetails = await User.findById(userDetailId).populate("flights");
-    res.status(200).json(userDetails.flights);
+    const bookings = await Booking.find({ user: userDetailId })
+      .populate("flight")
+      .populate("user");
+    res.status(200).json(bookings);
   },
 
   payment: async (req, res, next) => {

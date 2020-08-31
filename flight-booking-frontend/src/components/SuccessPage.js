@@ -18,8 +18,13 @@ class SuccessPage extends Component {
                 <h1>Booking successful!</h1>
                 <p>Your ticket number is {this.props.booking.bookingId}</p>
                 <p>
-                  <Button href="/myflights" variant="primary">
-                    View all bookings
+                  <Button variant="primary">
+                    <Link
+                      to="/"
+                      style={{ color: "inherit", textDecoration: "inherit" }}
+                    >
+                      View all bookings
+                    </Link>
                   </Button>{" "}
                 </p>
               </Jumbotron>
