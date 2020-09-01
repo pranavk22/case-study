@@ -33,7 +33,7 @@ if (!process.env.NODE_ENV === "test") {
     useUnifiedTopology: true,
   });
 } else {
-  mongoose.connect(uri, {
+  mongoose.connect(testUri, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,

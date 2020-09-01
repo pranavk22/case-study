@@ -40,7 +40,7 @@ module.exports = {
       return res.status(200).json({ token, foundUser });
     }
     const newUser = new User({
-      method: ["local"],
+      methods: ["local"],
       local: {
         email: email,
         password: password,
@@ -54,21 +54,9 @@ module.exports = {
   },
 
   signIn: async (req, res, next) => {
-    console.log(req.user, req.value, res.json, res.status);
+    console.log(req.user);
     const token = signToken(req.user);
     const newUser = req.user;
     res.status(200).json({ token, newUser });
-    console.log("Inside signIn method");
-  },
-
-  oAuth: async (req, res, next) => {
-    const token = signToken(req.user);
-    const newUser = req.user;
-    res.status(200).json({ token, newUser });
-  },
-
-  secret: async (req, res, next) => {
-    console.log("Inside secret method");
-    res.json({ secret: "response" });
   },
 };

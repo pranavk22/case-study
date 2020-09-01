@@ -17,11 +17,9 @@ describe("Users controller", () => {
     user: {
       id: faker.random.number(),
     },
-    value: {
-      body: {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      },
+    body: {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
     },
   };
   let res = {
@@ -50,13 +48,13 @@ describe("Users controller", () => {
         await userController.signIn(req, res);
 
         expect(res.status).to.have.been.calledWith(200);
-        expect(res.json.callCount).to.equal(1);
+        expect(res.json.callCount).to.equal();
       } catch (error) {
         throw new Error(error);
       }
     });
 
-    it("should return fake token using rewire", async () => {
+    it("should return fake token and user using rewire", async () => {
       sandbox.spy(res, "json");
       sandbox.spy(res, "status");
 
@@ -71,6 +69,7 @@ describe("Users controller", () => {
 
         expect(res.json).to.have.been.calledWith({
           token: "fakeToken",
+          newUser: req.user,
         });
         signToken();
       } catch (error) {
@@ -161,54 +160,7 @@ describe("Users controller", () => {
 
         expect(res.json).to.have.been.calledWith({
           token: "fakeTokenNumberTwo",
-        });
-        signToken();
-      } catch (error) {
-        throw new Error(error);
-      }
-    });
-  });
-
-  describe("googleOAuth", () => {
-    it("should return token if user passed the passport google oauth", async () => {
-      sandbox.spy(res, "json");
-      sandbox.spy(res, "status");
-
-      let signToken = userController.__set__(
-        "signToken",
-        (user) => "fakeTokenFromGoogleController"
-      );
-
-      try {
-        await userController.oAuth(req, res);
-
-        expect(res.status).to.have.been.calledWith(200);
-        expect(res.json).to.have.been.calledWith({
-          token: "fakeTokenFromGoogleController",
-        });
-        signToken();
-      } catch (error) {
-        throw new Error(error);
-      }
-    });
-  });
-
-  describe("facebookOAuth", () => {
-    it("should return token if user passed the passport facebook oauth", async () => {
-      sandbox.spy(res, "json");
-      sandbox.spy(res, "status");
-
-      let signToken = userController.__set__(
-        "signToken",
-        (user) => "fakeTokenFromFacebookController"
-      );
-
-      try {
-        await userController.oAuth(req, res);
-
-        expect(res.status).to.have.been.calledWith(200);
-        expect(res.json).to.have.been.calledWith({
-          token: "fakeTokenFromFacebookController",
+          newUser: req.user,
         });
         signToken();
       } catch (error) {

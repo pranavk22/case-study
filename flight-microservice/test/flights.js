@@ -13,11 +13,11 @@ describe("Flights API", () => {
    * Test the GET route
    */
 
-  describe("GET /api/flights", () => {
+  describe("GET flights", () => {
     it("It should GET all the flights", (done) => {
       chai
-        .request("http://localhost:8002")
-        .get("/api/flights")
+        .request("http://localhost:9000/flights")
+        .get("/")
         .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a("array");
@@ -26,8 +26,8 @@ describe("Flights API", () => {
     });
     it("It should NOT GET all the flights", (done) => {
       chai
-        .request("http://localhost:8002")
-        .get("/api/flight")
+        .request("http://localhost:9000/flights")
+        .get("/")
         .end((err, response) => {
           response.should.have.status(404);
           done();
@@ -40,10 +40,10 @@ describe("Flights API", () => {
    */
   describe("GET /api/flights/:_id", () => {
     it("It should GET a flight by id", (done) => {
-      const flightid = "5f462e21e01962aa48722f63";
+      const id = "5f462e21e01962aa48722f63";
       chai
-        .request("http://localhost:8002")
-        .get("/api/flights/" + flightid)
+        .request("http://localhost:9000/flights")
+        .get("/" + id)
         .end((err, response) => {
           response.should.have.status(200);
           response.body.should.be.a("object");
@@ -62,10 +62,10 @@ describe("Flights API", () => {
         });
     });
     it("It should NOT GET a flight by id", (done) => {
-      const flightid = "5f462e21e01962aa48722f62";
+      const id = "5f462e21e01962aa48722f62";
       chai
-        .request("http://localhost:8002")
-        .get("/api/flights/" + flightid)
+        .request("http://localhost:9000/flights")
+        .get("/" + id)
         .end((err, response) => {
           response.should.have.status(404);
           done();
@@ -88,8 +88,8 @@ describe("Flights API", () => {
         fare: "4500",
       };
       chai
-        .request("http://localhost:8002")
-        .post("/api/flights")
+        .request("http://localhost:9000/flights")
+        .post("/")
         .send(flight)
         .end((err, response) => {
           response.should.have.status(201);
@@ -114,8 +114,8 @@ describe("Flights API", () => {
         fare: "4500",
       };
       chai
-        .request("http://localhost:8002")
-        .post("/api/flights")
+        .request("http://localhost:9000/flights")
+        .post("/")
         .send(flight)
         .end((err, response) => {
           response.should.have.status(400);
@@ -129,7 +129,7 @@ describe("Flights API", () => {
   //  */
   // describe("PUT /api/flights/:_id", ()=>{
   //     it("It should PUT a new flight", (done)=>{
-  //         const flightid='5f4b92bfe7a737e9a4098af2'
+  //         const id='5f4b92bfe7a737e9a4098af2'
   //         const flight={
   //             _id:'5f4b92bfe7a737e9a4098af2',
   //             flight_name:"DEL-JAI-112",
@@ -141,7 +141,7 @@ describe("Flights API", () => {
   //             fare:"4500"
   //         };
   //         chai.request('http://localhost:8002')
-  //         .put("/api/flights/" +flightid)
+  //         .put("/api/flights/" +id)
   //         .send(flight)
   //         .end((err,response)=>{
   //             response.should.have.status(200);
@@ -165,20 +165,20 @@ describe("Flights API", () => {
    */
   describe("DELETE /api/flights/:_id", () => {
     it("It should DELETE a flight", (done) => {
-      const flightid = "5f4b96240894abc6100e0698";
+      const id = "5f4b96240894abc6100e0698";
       chai
-        .request("http://localhost:8002")
-        .delete("/api/flights/" + flightid)
+        .request("http://localhost:9000/flights")
+        .delete("/" + id)
         .end((err, response) => {
           response.should.have.status(200);
           done();
         });
     });
     it("It should Not DELETE a flight that does not exist", (done) => {
-      const flightid = "5f4b92bfe7a737e9a4098af2";
+      const id = "5f4b92bfe7a737e9a4098af2";
       chai
-        .request("http://localhost:8002")
-        .delete("/api/flights/" + flightid)
+        .request("http://localhost:9000/flights")
+        .delete("/" + id)
         .end((err, response) => {
           response.should.have.status(404);
           done();
