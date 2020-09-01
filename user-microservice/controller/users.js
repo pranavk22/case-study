@@ -18,13 +18,29 @@ module.exports = {
   signUp: async (req, res, next) => {
     const { email, password } = req.body;
 
-    const foundUser = await User.findOne({ "local.email": email });
+    let foundUser = await User.findOne({ "local.email": email });
     if (foundUser) {
-      return res.status(409).json({ error: "Email is already in use" });
+      return res.status(403).json({ error: "Email is already in use" });
     }
 
+    foundUser = await User.findOne({
+      $or: [{ "google.email": email }, { "facebook.email": email }],
+    });
+    if (foundUser) {
+      // Let's merge them?
+      foundUser.methods.push("local");
+      foundUser.local = {
+        email: email,
+        password: password,
+      };
+      await foundUser.save();
+      // Generate the token
+      const token = signToken(foundUser);
+      // Respond with token
+      return res.status(200).json({ token, foundUser });
+    }
     const newUser = new User({
-      method: "local",
+      method: ["local"],
       local: {
         email: email,
         password: password,

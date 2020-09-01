@@ -65,15 +65,31 @@ passport.use(
         console.log(accessToken);
         console.log(refreshToken);
         console.log(profile);
-        const existingUser = await User.findOne({ "google.id": profile.id });
+        let existingUser = await User.findOne({ "google.id": profile.id });
         if (existingUser) {
           console.log("User already exists");
           return done(null, existingUser);
         }
         console.log("User did not exist. New user created");
 
+        // Check if we have someone with the same email
+        existingUser = await User.findOne({
+          "local.email": profile.emails[0].value,
+        });
+        if (existingUser) {
+          // We want to merge google's data with local auth
+          existingUser.methods.push("google");
+          existingUser.google = {
+            id: profile.id,
+            email: profile.emails[0].value,
+            displayName: profile.displayName,
+          };
+          await existingUser.save();
+          console.log("Merged account with existing");
+          return done(null, existingUser);
+        }
         const newUser = new User({
-          method: "google",
+          methods: ["google"],
           google: {
             id: profile.id,
             email: profile.emails[0].value,
@@ -106,15 +122,30 @@ passport.use(
         console.log(accessToken);
         console.log(refreshToken);
         console.log(profile);
-        const existingUser = await User.findOne({ "facebook.id": profile.id });
+        let existingUser = await User.findOne({ "facebook.id": profile.id });
         if (existingUser) {
           console.log("User already exists");
           return done(null, existingUser);
         }
         console.log("User did not exist. New user created");
 
+        existingUser = await User.findOne({
+          "local.email": profile.emails[0].value,
+        });
+        if (existingUser) {
+          // We want to merge facebook's data with local auth
+          existingUser.methods.push("facebook");
+          existingUser.facebook = {
+            id: profile.id,
+            email: profile.emails[0].value,
+          };
+          await existingUser.save();
+          console.log("Merged account with existing");
+          return done(null, existingUser);
+        }
+
         const newUser = new User({
-          method: "facebook",
+          methods: ["facebook"],
           facebook: {
             id: profile.id,
             email: profile.emails[0].value,

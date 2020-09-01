@@ -39,8 +39,8 @@ class SignIn extends Component {
     }
   }
 
-  handleSignIn = () => {
-    this.props.history.push("/signin");
+  handleSignUp = () => {
+    this.props.history.push("/signup");
   };
 
   async responseFacebook(response) {
