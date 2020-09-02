@@ -3,15 +3,14 @@ const bcrypt = require("bcryptjs");
 const Schema = mongoose.Schema;
 
 var userSchema = new Schema({
-  method: {
-    type: String,
-    enum: ["local", "google", "facebook"],
+  methods: {
+    type: [String],
     required: true,
   },
   local: {
     email: {
       type: String,
-      match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+      // match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
       // required: true,
       // unique: true,
       lowercase: true,
@@ -60,12 +59,27 @@ var userSchema = new Schema({
 
 userSchema.pre("save", async function (next) {
   try {
-    if (this.method !== "local") {
+    console.log("entered");
+    if (!this.methods.includes("local")) {
       next();
     }
+    //the user schema is instantiated
+    const user = this;
+    console.log(user.isModified("local.password"));
+    //check if the user has been modified to know if the password has already been hashed
+    if (!user.isModified("local.password")) {
+      next();
+    }
+    // Generate a salt
     const salt = await bcrypt.genSalt(10);
+    console.log(salt);
+    // Generate a password hash (salt + hash)
     const passwordHash = await bcrypt.hash(this.local.password, salt);
+    console.log(passwordHash);
+    // Re-assign hashed version over original, plain text password
     this.local.password = passwordHash;
+    console.log(this.local.password);
+    console.log("exited");
     next();
   } catch (error) {
     next(error);

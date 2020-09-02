@@ -1,30 +1,96 @@
 import React, { Component } from "react";
 import { Button, Alert, Card, Modal, Breadcrumb } from "react-bootstrap";
-import { reduxForm, Field } from "redux-form";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { reduxForm, Field, getFormValues } from "redux-form";
 import { connect } from "react-redux";
 import { compose } from "redux";
 
 import * as actions from "../actions";
 import CustomInput from "./CustomInput";
 
+const cities = [
+  { city: "Pune", code: "PNQ" },
+  {
+    city: "Mumbai",
+    code: "BOM",
+  },
+];
+
+const onSubmit = (values) => {
+  console.log(values);
+};
 export class Home extends Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
-    this.state = { show: false, swap: false };
+    this.state = {
+      show: false,
+      swap: false,
+      from: "",
+      to: "",
+      date: "",
+    };
     // this.state = { flights: [] };
   }
 
+  renderFrom = ({
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+    <Autocomplete
+      label={label}
+      options={cities}
+      placeholder={label}
+      getOptionLabel={(option) => option.city}
+      onChange={(event, value) => {
+        this.setState({ from: value.code });
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label={label} variant="outlined" fullWidth />
+      )}
+    />
+  );
+
+  renderTo = ({
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  }) => (
+    <Autocomplete
+      label={label}
+      options={cities}
+      placeholder={label}
+      getOptionLabel={(option) => option.city}
+      onChange={(event, value) => {
+        this.setState({ to: value.code });
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label={label} variant="outlined" fullWidth />
+      )}
+    />
+  );
   async onSubmit(formData) {
     if (this.state.swap) {
-      const swapper = formData.from;
-      formData.from = formData.to;
-      formData.to = swapper;
+      const swapper = this.state.from;
+      this.state.from = this.state.to;
+      this.state.to = swapper;
       this.setState({ swap: false });
     }
+    await this.setState({
+      date: formData.date,
+    });
+    console.log(this.state.date);
     console.log(formData);
 
-    await this.props.searchFlight(formData);
+    await this.props.searchFlight({
+      from: this.state.from,
+      to: this.state.to,
+      date: this.state.date,
+    });
     // this.setState({ flights: flights });
     // console.log(this.state.flights);
     // if (res) {
@@ -76,22 +142,18 @@ export class Home extends Component {
                       name="from"
                       type="text"
                       id="from"
-                      maxLength="3"
-                      label="Source"
-                      placeholder="From"
+                      label="From"
                       required
-                      component={CustomInput}
+                      component={this.renderFrom}
                     ></Field>
                   ) : (
                     <Field
                       name="to"
                       type="text"
                       id="to"
-                      maxLength="3"
-                      label="Source"
-                      placeholder="From"
+                      label="From"
                       required
-                      component={CustomInput}
+                      component={this.renderTo}
                     ></Field>
                   )}
                 </fieldset>
@@ -108,22 +170,18 @@ export class Home extends Component {
                       name="to"
                       type="text"
                       id="to"
-                      maxLength="3"
-                      label="Destination"
-                      placeholder="To"
+                      label="To"
                       required
-                      component={CustomInput}
+                      component={this.renderTo}
                     ></Field>
                   ) : (
                     <Field
                       name="from"
                       type="text"
                       id="from"
-                      maxLength="3"
-                      label="Destination"
-                      placeholder="To"
+                      label="To"
                       required
-                      component={CustomInput}
+                      component={this.renderFrom}
                     ></Field>
                   )}
                 </fieldset>
@@ -253,8 +311,11 @@ function mapStateToProps(state) {
     errorMessage: state.auth.errorMessage,
   };
 }
+// Home = connect((state) => ({
+//   values: getFormValues("myForm")(state),
+// }))(Home);
 
 export default compose(
   connect(mapStateToProps, actions),
-  reduxForm({ form: "search" })
+  reduxForm({ form: "search", onSubmit })
 )(Home);

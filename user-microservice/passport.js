@@ -74,7 +74,10 @@ passport.use(
 
         // Check if we have someone with the same email
         existingUser = await User.findOne({
-          "local.email": profile.emails[0].value,
+          $or: [
+            { "local.email": profile.emails[0].value },
+            { "facebook.email": profile.emails[0].value },
+          ],
         });
         if (existingUser) {
           // We want to merge google's data with local auth
@@ -130,7 +133,10 @@ passport.use(
         console.log("User did not exist. New user created");
 
         existingUser = await User.findOne({
-          "local.email": profile.emails[0].value,
+          $or: [
+            { "local.email": profile.emails[0].value },
+            { "google.email": profile.emails[0].value },
+          ],
         });
         if (existingUser) {
           // We want to merge facebook's data with local auth

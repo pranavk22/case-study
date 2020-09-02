@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+const pdf = require("html-pdf");
+
+const pdfTemplate = require("./documents");
 
 require("dotenv").config();
 
@@ -26,6 +29,20 @@ connection.once("open", () => {
 const bookingsRouter = require("./routes/bookings");
 
 app.use("/bookings", bookingsRouter);
+
+app.post("/create-pdf", (req, res) => {
+  pdf.create(pdfTemplate(req.body), {}).toFile("result.pdf", (err) => {
+    if (err) {
+      res.send(Promise.reject());
+    }
+
+    res.send(Promise.resolve());
+  });
+});
+
+app.get("/fetch-pdf", (req, res) => {
+  res.sendFile(`${__dirname}/result.pdf`);
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

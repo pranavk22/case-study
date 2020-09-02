@@ -1,12 +1,42 @@
 const router = require("express").Router();
 let Flight = require("../models/flight");
 
+/**
+ * @swagger
+ * /flights/:
+ *  get:
+ *    description: Used to get all the flights
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ *      '500':
+ *        description: Server error
+ */
 router.route("/").get((req, res) => {
   Flight.find()
     .then((flights) => res.status(200).json(flights))
     .catch((err) => res.status(500).json("Error: " + err));
 });
 
+/**
+ * @swagger
+ * /flights/:
+ *  post:
+ *    description: Used to add new flight
+ *  parameters:
+ *      - airlines: customer
+ *        in: query
+ *        description: Name of our customer
+ *        required: false
+ *        schema:
+ *          type: string
+ *          format: string
+ *  responses:
+ *      '201':
+ *        description: Successfully added flight
+ *      '500':
+ *        description: Server error
+ */
 router.route("/").post((req, res) => {
   const newFlight = new Flight(req.body);
 
@@ -16,6 +46,17 @@ router.route("/").post((req, res) => {
     .catch((err) => res.status(500).json("Error: " + err));
 });
 
+/**
+ * @swagger
+ * /flights/:
+ *  post:
+ *    description: Used to add new flight
+ *  responses:
+ *      '201':
+ *        description: Successfully added flight
+ *      '500':
+ *        description: Server error
+ */
 router.route("/:id").get((req, res) => {
   Flight.findById(req.params.id)
     .then((flight) => res.status(200).json(flight))

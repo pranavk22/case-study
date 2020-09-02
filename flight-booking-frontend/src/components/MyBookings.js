@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Button, Alert, Card, Modal, Breadcrumb, Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { saveAs } from "file-saver";
 
 import * as actions from "../actions";
 
@@ -47,6 +49,20 @@ class MyFlights extends Component {
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
 
+  createAndDownloadPdf = (booking) => {
+    axios
+      .post("http://localhost:9100/create-pdf", booking)
+      .then(() =>
+        axios.get("http://localhost:9100/fetch-pdf", {
+          responseType: "blob",
+        })
+      )
+      .then((res) => {
+        const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+
+        saveAs(pdfBlob, "BoardingPass.pdf");
+      });
+  };
   render() {
     return (
       <div>
@@ -132,7 +148,7 @@ class MyFlights extends Component {
                     </Button>
                     <Button
                       variant="primary"
-                      // onClick={() => this.bookNow(booking.flight._id)}
+                      onClick={() => this.createAndDownloadPdf(booking)}
                       // href={"/book/" + flight._id}
                     >
                       Check in
