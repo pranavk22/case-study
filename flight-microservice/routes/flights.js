@@ -5,10 +5,11 @@ let Flight = require("../models/flight");
  * @swagger
  * /flights/:
  *  get:
+ *    summary: Get all flights
  *    description: Used to get all the flights
  *    responses:
  *      '200':
- *        description: A successful response
+ *        description: Got all flights successfully
  *      '500':
  *        description: Server error
  */
@@ -22,20 +23,35 @@ router.route("/").get((req, res) => {
  * @swagger
  * /flights/:
  *  post:
- *    description: Used to add new flight
+ *    summary: Creates a new flight.
+ *    description: Used to create new flight
+ *    responses:
+ *         '200':
+ *           description: A successful response
+ *         '500':
+ *           description: Server error
+ *    consumes:
+ *       — application/json
  *  parameters:
- *      - airlines: customer
- *        in: query
- *        description: Name of our customer
- *        required: false
- *        schema:
- *          type: string
- *          format: string
- *  responses:
- *      '201':
- *        description: Successfully added flight
- *      '500':
- *        description: Server error
+ *       — in: body
+ *       name: newFlight
+ *       description: The flight to create.
+ *       schema:
+ *           type: Object
+ *           properties:
+ *             airlines:
+ *               type: String
+ *             name:
+ *               type: String
+ *             from:
+ *               type: String
+ *             to:
+ *               type: String
+ *             date:
+ *               type: Date
+ *             fare:
+ *               type: Number
+ *
  */
 router.route("/").post((req, res) => {
   const newFlight = new Flight(req.body);
@@ -48,14 +64,22 @@ router.route("/").post((req, res) => {
 
 /**
  * @swagger
- * /flights/:
- *  post:
- *    description: Used to add new flight
- *  responses:
- *      '201':
- *        description: Successfully added flight
+ * /flights/{id}:
+ *  get:
+ *    summary: Fetch a flight.
+ *    description: Used to fetch a single flight
+ *    responses:
+ *      '200':
+ *        description: Successfully fetched flight
  *      '500':
  *        description: Server error
+ *  parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *         type: String
+ *         description: The flight ID
  */
 router.route("/:id").get((req, res) => {
   Flight.findById(req.params.id)
@@ -63,18 +87,87 @@ router.route("/:id").get((req, res) => {
     .catch((err) => res.status(500).json("Error: " + err));
 });
 
+/**
+ * @swagger
+ * /flights/{id}:
+ *  delete:
+ *    summary: Delete a flight.
+ *    description: Used to delete a flight
+ *    responses:
+ *      '200':
+ *        description: Successfully deleted flight
+ *      '500':
+ *        description: Server error
+ *  parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *         type: String
+ *         description: The flight ID
+ */
 router.route("/:id").delete((req, res) => {
   Flight.findByIdAndDelete(req.params.id)
     .then(() => res.status(200).json("Flight deleted."))
     .catch((err) => res.status(500).json("Error: " + err));
 });
 
+/**
+ * @swagger
+ * /flights/{id}:
+ *  patch:
+ *    summary: Modify a flight.
+ *    description: Used to modify existing flight
+ *    responses:
+ *      '200':
+ *        description: Successfully updated flight
+ *      '500':
+ *        description: Server error
+ *  parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *         type: String
+ *         description: The flight ID
+ */
 router.route("/:id").patch((req, res) => {
   Flight.findByIdAndUpdate(req.params.id, req.body)
-    .then(res.json("Flight updated!"))
+    .then(res.status(200).json("Flight updated!"))
     .catch((err) => res.status(500).json("Error: " + err));
 });
 
+/**
+ * @swagger
+ * /flights/search/:
+ *  post:
+ *    summary: Search flights
+ *    description: Used to search flights
+ *    responses:
+ *      '200':
+ *        description: Successfully searched flights
+ *      '500':
+ *        description: Server error
+ *  parameters:
+ *       - in: body
+ *         name: from
+ *         required: true
+ *         schema:
+ *         type: String
+ *         description: Source
+ *       - in: body
+ *         name: to
+ *         required: true
+ *         schema:
+ *         type: String
+ *         description: Destination
+ *       - in: body
+ *         name: date
+ *         required: true
+ *         schema:
+ *         type: Date
+ *         description: Journey date
+ */
 router.route("/search").post((req, res) => {
   const from = req.body.from;
   const to = req.body.to;

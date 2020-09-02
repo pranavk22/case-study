@@ -359,22 +359,6 @@ body{
   font-size: 17px;
 }
 
-.gate{
-  position: absolute;
-  top: 10px;
-  left: 280px;
-  font-family: Arial Narrow, Arial;
-  font-weight: bold;
-  font-size: 14px;
-  color: #999;
-}
-
-.gate span{
-  color: #555;
-  font-size: 17px;
-}
-
-
 .seat{
   position: absolute;
   top: 10px;
@@ -559,14 +543,25 @@ body{
       <span class="sfo sfoslip">${booking.flight.to}</span>
       <div class="sub-content">
         <span class="watermark">${booking.flight.airlines}</span>
-        <span class="name">PASSENGER NAME<br><span>${booking.user.lastName}, ${booking.user.firstName}</span></span>
-        <span class="flight">FLIGHT N&deg;<br><span>${booking.flight.name}</span></span>
+        <span class="name">PASSENGER NAME<br><span>${booking.user.lastName}, ${
+    booking.user.firstName
+  }</span></span>
+        <span class="flight">FLIGHT N&deg;<br><span>${
+          booking.flight.name
+        }</span></span>
         <span class="seat">SEAT<br><span>45A</span></span>
-        <span class="boardingtime">BOARDING ON<br><span>${booking.flight.date}</span></span>
+        <span class="boardingtime">BOARDING ON<br><span>${booking.flight.date.substring(
+          0,
+          10
+        )}</span></span>
             
-         <span class="flight flightslip">FLIGHT N&deg;<br><span>${booking.flight.name}</span></span>
+         <span class="flight flightslip">FLIGHT N&deg;<br><span>${
+           booking.flight.name
+         }</span></span>
           <span class="seat seatslip">SEAT<br><span>45A</span></span>
-         <span class="name nameslip">PASSENGER NAME<br><span>${booking.user.lastName}, ${booking.user.firstName}</span></span>
+         <span class="name nameslip">PASSENGER NAME<br><span>${
+           booking.user.lastName
+         }, ${booking.user.firstName}</span></span>
       </div>
     </div>
     <div class="barcode"></div>

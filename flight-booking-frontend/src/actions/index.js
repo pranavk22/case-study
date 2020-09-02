@@ -121,7 +121,54 @@ export const validateSignUp = (data) => {
     }
   };
 };
+export const validateSearch = (data) => {
+  return (dispatch) => {
+    if (data.from && data.to && data.date) {
+      if (data.from === data.to) {
+        dispatch({
+          type: FLIGHT_ERROR,
+          payload: "Source and destination cannot be same",
+        });
+        return false;
+      } else {
+        console.log(Date.now());
+        if (Date.parse(data.date) < Date.now()) {
+          dispatch({
+            type: FLIGHT_ERROR,
+            payload: "Past date is not allowed",
+          });
+          return false;
+        } else return true;
+      }
+    } else {
+      dispatch({
+        type: FLIGHT_ERROR,
+        payload: "All fields are required",
+      });
+      return false;
+    }
+  };
+};
 
+export const validateUserDetails = (data) => {
+  return (dispatch) => {
+    if (data.firstName && data.lastName && data.birthdate) {
+      if (Date.parse(data.birthdate) > Date.now()) {
+        dispatch({
+          type: USER_DETAILS_ERROR,
+          payload: "Future date is not allowed",
+        });
+        return false;
+      } else return true;
+    } else {
+      dispatch({
+        type: USER_DETAILS_ERROR,
+        payload: "All fields are required",
+      });
+      return false;
+    }
+  };
+};
 export const validateSignIn = (data) => {
   return (dispatch) => {
     if (data.email && data.password) {
@@ -235,16 +282,22 @@ export const searchFlight = (data) => {
         data
       );
       console.log(res.data);
-
-      dispatch({
-        type: SEARCH_FLIGHT,
-        payload: res.data,
-      });
+      if (res.data.length > 0) {
+        dispatch({
+          type: SEARCH_FLIGHT,
+          payload: res.data,
+        });
+      } else {
+        dispatch({
+          type: FLIGHT_ERROR,
+          payload: "Could not get any flights",
+        });
+      }
       // return res.data;
     } catch (error) {
       dispatch({
         type: FLIGHT_ERROR,
-        payload: "Could not get any flights",
+        payload: "Could not connect",
       });
       console.log(error);
     }

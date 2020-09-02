@@ -16,6 +16,7 @@ app.use(morgan("dev"));
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
+      swagger: "2.0",
       version: "1.0.0",
       title: "Flights API",
       description: "Flights API Information",

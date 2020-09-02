@@ -54,9 +54,12 @@ class BookFlight extends Component {
 
   async onSubmit(formData) {
     console.log(formData);
-    await this.props.addUserDetails(this.props.user._id, formData);
-    this.loadPassengers();
-    this.state.showForm = false;
+    const res = await this.props.validateUserDetails(formData);
+    if (res) {
+      await this.props.addUserDetails(this.props.user._id, formData);
+      this.loadPassengers();
+      this.state.showForm = false;
+    }
   }
   render() {
     const { handleSubmit } = this.props;
@@ -305,7 +308,7 @@ class BookFlight extends Component {
 
 function mapStateToProps(state) {
   return {
-    errorMessage: state.auth.errorMessage,
+    errorMessage: state.user.errorMessage,
     flight: state.flight.flight,
     user: state.auth.user,
     userDetails: state.user.userDetails,

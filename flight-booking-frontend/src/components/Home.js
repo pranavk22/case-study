@@ -10,16 +10,42 @@ import * as actions from "../actions";
 import CustomInput from "./CustomInput";
 
 const cities = [
+  { city: "Mumbai", code: "BOM" },
+  { city: "Bengalore", code: "BLR" },
+  { city: "Chennai", code: "MAA" },
+  { city: "Kolkata", code: "CCU" },
+  { city: "Lucknow", code: "LKO" },
+  { city: "Amritsar", code: "ATQ" },
+  { city: "Vishakhapatnam", code: "VTZ" },
+  { city: "Kannur", code: "CNN" },
+  { city: "Raipur", code: "RPR" },
+  { city: "Surat", code: "STV" },
+  { city: "Indore", code: "IDR" },
+  { city: "Kochi", code: "COK" },
+  { city: "Ahmedabad", code: "AMD" },
+  { city: "Delhi", code: "DEL" },
+  { city: "Goa", code: "GOI" },
   { city: "Pune", code: "PNQ" },
-  {
-    city: "Mumbai",
-    code: "BOM",
-  },
+  { city: "Thiruvananthapuram", code: "TRV" },
+  { city: "Coimbatore", code: "CJB" },
+  { city: "Calicut", code: "CCJ" },
+  { city: "Bhubaneshwar", code: "BBI" },
+  { city: "Guwahati", code: "GAU" },
+  { city: "Varanasi", code: "VNS" },
+  { city: "Hyderabad", code: "HYD" },
+  { city: "Tiruchirapalli", code: "TRZ" },
+  { city: "Nagpur", code: "NAG" },
+  { city: "Srinagar", code: "SXR" },
+  { city: "Imphal", code: "IMF" },
+  { city: "Jaipur", code: "JAI" },
+  { city: "Madurai", code: "IXM" },
+  { city: "Siliguri", code: "IXB" },
+  { city: "Patna", code: "PAT" },
+  { city: "Mangalore", code: "IXE" },
+  { city: "Chandigarh", code: "IXC" },
+  { city: "Andaman & Nicobar", code: "IXZ" },
 ];
 
-const onSubmit = (values) => {
-  console.log(values);
-};
 export class Home extends Component {
   constructor(props) {
     super(props);
@@ -46,7 +72,7 @@ export class Home extends Component {
       placeholder={label}
       getOptionLabel={(option) => option.city}
       onChange={(event, value) => {
-        this.setState({ from: value.code });
+        this.setState({ from: value });
       }}
       renderInput={(params) => (
         <TextField {...params} label={label} variant="outlined" fullWidth />
@@ -66,14 +92,14 @@ export class Home extends Component {
       placeholder={label}
       getOptionLabel={(option) => option.city}
       onChange={(event, value) => {
-        this.setState({ to: value.code });
+        this.setState({ to: value });
       }}
       renderInput={(params) => (
         <TextField {...params} label={label} variant="outlined" fullWidth />
       )}
     />
   );
-  async onSubmit(formData) {
+  async onSubmit(dateData) {
     if (this.state.swap) {
       const swapper = this.state.from;
       this.state.from = this.state.to;
@@ -81,21 +107,22 @@ export class Home extends Component {
       this.setState({ swap: false });
     }
     await this.setState({
-      date: formData.date,
+      date: dateData.date,
     });
     console.log(this.state.date);
-    console.log(formData);
-
-    await this.props.searchFlight({
-      from: this.state.from,
-      to: this.state.to,
+    console.log(dateData);
+    const formData = {
+      from: this.state.from.code,
+      to: this.state.to.code,
       date: this.state.date,
-    });
-    // this.setState({ flights: flights });
-    // console.log(this.state.flights);
-    // if (res) {
-    //   await this.props.signUp(formData);
-    // }
+    };
+    console.log(formData);
+    const res = await this.props.validateSearch(formData);
+    console.log(res);
+    if (res) {
+      await this.props.searchFlight(formData);
+    }
+
     // if (!this.props.errorMessage) {
     //   this.props.history.push("/");
     // }
@@ -158,12 +185,12 @@ export class Home extends Component {
                   )}
                 </fieldset>
 
-                <Button
+                {/* <Button
                   style={{ textAlignLast: "center", width: "100%" }}
                   onClick={() => this.handleSwap()}
                 >
                   <b>↑↓</b>
-                </Button>
+                </Button> */}
                 <fieldset>
                   {!this.state.swap ? (
                     <Field
@@ -191,9 +218,8 @@ export class Home extends Component {
                     name="date"
                     type="date"
                     id="date"
-                    // label="Confirm Password"
-                    label="Journey date"
-                    required
+                    // label="Journey date
+                    // defaultValue={Date.now()}
                     component={CustomInput}
                   ></Field>
                 </fieldset>
@@ -218,14 +244,14 @@ export class Home extends Component {
                   <table style={{ width: "100%", tableLayout: "fixed" }}>
                     <tbody>
                       <tr>
-                        <td style={{ fontSize: "1.8rem" }}>{flight.from}</td>
+                        <td style={{ fontSize: "1.4rem" }}>{flight.from}</td>
                         <td>
                           <span class="plane">
                             <svg
                               clip-rule="evenodd"
                               fill-rule="evenodd"
-                              height="50"
-                              width="50"
+                              height="30"
+                              width="30"
                               image-rendering="optimizeQuality"
                               shape-rendering="geometricPrecision"
                               text-rendering="geometricPrecision"
@@ -252,8 +278,8 @@ export class Home extends Component {
                             </svg>
                           </span>
                         </td>
-                        <td style={{ fontSize: "1.8rem" }}>{flight.to}</td>
-                        <td style={{ fontSize: "1.8rem" }}>
+                        <td style={{ fontSize: "1.4rem" }}>{flight.to}</td>
+                        <td style={{ fontSize: "1.4rem" }}>
                           {/* <span style={{ float: "right" }}> */}
                           &#8377;{flight.fare}
                           {/* </span> */}
@@ -308,7 +334,7 @@ function mapStateToProps(state) {
   return {
     isAuth: state.auth.isAuthenticated,
     flights: state.flight.flights,
-    errorMessage: state.auth.errorMessage,
+    errorMessage: state.flight.errorMessage,
   };
 }
 // Home = connect((state) => ({
@@ -317,5 +343,5 @@ function mapStateToProps(state) {
 
 export default compose(
   connect(mapStateToProps, actions),
-  reduxForm({ form: "search", onSubmit })
+  reduxForm({ form: "search" })
 )(Home);
