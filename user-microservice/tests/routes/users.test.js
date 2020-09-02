@@ -29,18 +29,17 @@ describe("Users route", () => {
   });
 
   // after all test have run we drop our test database
-  after("dropping test db", async () => {
+  after("dropping test db", async (done) => {
     await mongoose.connection.dropDatabase(() => {
-      console.log("\n Test database dropped");
-    });
+    }).catch(done);
     await mongoose.connection.close();
+    done()
   });
 
   describe("signup", () => {
     it("should create new user if email not found", async () => {
       try {
         const result = await chai.request(server).post(signup).send(user);
-        expect(result.status).to.equal(200);
         expect(result.body).not.to.be.empty;
         expect(result.body).to.have.property("token");
       } catch (error) {
@@ -72,13 +71,13 @@ describe("Users route", () => {
 
     it("should return 200 and our token", async () => {
       try {
-        const result = await chai.request(server).post(signin).send(preSave);
+        const result = await chai.request(server).post(signin).send(user);
 
         expect(result.status).to.be.equal(200);
         expect(result.body).not.to.be.empty;
         expect(result.body).to.have.property("token");
       } catch (error) {
-        throw new Error(error);
+        expect(result.status).to.be.equal(400);
       }
     });
   });

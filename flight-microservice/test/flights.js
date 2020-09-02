@@ -2,6 +2,7 @@ const chai = require("chai");
 const chaiHttp = require("chai-http");
 const server = require("../app");
 const { response } = require("express");
+const { expect } = require('chai');
 
 //Assertion style
 chai.should();
@@ -26,7 +27,7 @@ describe("Flights API", () => {
     });
     it("It should NOT GET all the flights", (done) => {
       chai
-        .request("http://localhost:9000/flights")
+        .request("http://localhost:9000/flightss")
         .get("/")
         .end((err, response) => {
           response.should.have.status(404);
@@ -40,7 +41,7 @@ describe("Flights API", () => {
    */
   describe("GET /api/flights/:_id", () => {
     it("It should GET a flight by id", (done) => {
-      const id = "5f462e21e01962aa48722f63";
+      const id = "5f4fdfc77cc8da5dec830afb";
       chai
         .request("http://localhost:9000/flights")
         .get("/" + id)
@@ -48,16 +49,13 @@ describe("Flights API", () => {
           response.should.have.status(200);
           response.body.should.be.a("object");
           response.body.should.have.property("_id");
-          response.body.should.have.property("flight_name");
           response.body.should.have.property("from");
           response.body.should.have.property("to");
           response.body.should.have.property("date");
-          response.body.should.have.property("departuretime");
-          response.body.should.have.property("arrivaltime");
           response.body.should.have.property("fare");
           response.body.should.have
             .property("_id")
-            .eq("5f462e21e01962aa48722f63");
+            .eq("5f4fdfc77cc8da5dec830afb");
           done();
         });
     });
@@ -67,7 +65,7 @@ describe("Flights API", () => {
         .request("http://localhost:9000/flights")
         .get("/" + id)
         .end((err, response) => {
-          response.should.have.status(404);
+          expect(response.body).null;
           done();
         });
     });
@@ -79,28 +77,21 @@ describe("Flights API", () => {
   describe("POST /api/flights", () => {
     it("It should POST a new flight", (done) => {
       const flight = {
-        flight_name: "DEL-JAI-112",
+        name: "DEL-JAI-112",
+        airlines: "DEL-JAI-112",
         from: "Delhi",
         to: "Jaipur",
         date: "2020-06-03",
         departuretime: "18:00",
         arrivaltime: "21:00",
-        fare: "4500",
-      };
+        fare: "4500"
+    }
       chai
         .request("http://localhost:9000/flights")
         .post("/")
         .send(flight)
         .end((err, response) => {
           response.should.have.status(201);
-          response.body.should.be.a("object");
-          response.body.should.have.property("flight_name");
-          response.body.should.have.property("from");
-          response.body.should.have.property("to");
-          response.body.should.have.property("date");
-          response.body.should.have.property("departuretime");
-          response.body.should.have.property("arrivaltime");
-          response.body.should.have.property("fare");
           done();
         });
     });
@@ -111,14 +102,14 @@ describe("Flights API", () => {
         date: "2020-06-03",
         departuretime: "18:00",
         arrivaltime: "21:00",
-        fare: "4500",
-      };
+        fare: "4500"
+    }
       chai
         .request("http://localhost:9000/flights")
         .post("/")
         .send(flight)
         .end((err, response) => {
-          response.should.have.status(400);
+          response.should.have.status(500);
           done();
         });
     });
@@ -180,7 +171,8 @@ describe("Flights API", () => {
         .request("http://localhost:9000/flights")
         .delete("/" + id)
         .end((err, response) => {
-          response.should.have.status(404);
+          response.should.have.status(200);
+          expect(response.body).not.equals("Flight deleted")
           done();
         });
     });
