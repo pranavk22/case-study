@@ -2,6 +2,7 @@ const chai = require("chai");
 const faker = require("faker");
 const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
+const chaiHttp = require("chai-http");
 const rewire = require("rewire");
 const { expect } = chai;
 
@@ -11,7 +12,9 @@ const userController = rewire("../../controller/users.js");
 chai.use(sinonChai);
 
 let sandbox = null;
+const server = require("../../app");
 
+chai.use(chaiHttp);
 describe("Users controller", () => {
   let req = {
     user: {
