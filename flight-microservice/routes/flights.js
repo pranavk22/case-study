@@ -25,33 +25,36 @@ router.route("/").get((req, res) => {
  *  post:
  *    summary: Creates a new flight.
  *    description: Used to create new flight
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: Object
+ *            properties:
+ *              airlines:
+ *                type: String
+ *              name:
+ *                type: String
+ *              from:
+ *                type: String
+ *              to:
+ *                type: String
+ *              date:
+ *                type: Date
+ *              fare:
+ *                type: Number
+ *            example:
+ *              airlines: Air India
+ *              name: AI4131
+ *              from: PNQ
+ *              to: BOM
+ *              date: 2020-09-05
+ *              fare: 4000
  *    responses:
  *         '200':
  *           description: A successful response
  *         '500':
  *           description: Server error
- *    consumes:
- *       — application/json
- *  parameters:
- *       — in: body
- *       name: newFlight
- *       description: The flight to create.
- *       schema:
- *           type: Object
- *           properties:
- *             airlines:
- *               type: String
- *             name:
- *               type: String
- *             from:
- *               type: String
- *             to:
- *               type: String
- *             date:
- *               type: Date
- *             fare:
- *               type: Number
- *
  */
 router.route("/").post((req, res) => {
   const newFlight = new Flight(req.body);

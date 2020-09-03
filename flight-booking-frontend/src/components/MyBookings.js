@@ -1,17 +1,35 @@
 import React, { Component } from "react";
-import { Button, Alert, Card, Modal, Breadcrumb, Table } from "react-bootstrap";
+import { Button, Card, Modal, Spinner } from "react-bootstrap";
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { compose } from "redux";
 import { saveAs } from "file-saver";
 
 import * as actions from "../actions";
+
+const useStyles = (theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
+  },
+});
 
 class MyFlights extends Component {
   constructor(props) {
     super(props);
     this.loadPassengers();
-    this.state = { bookings: [], show: false, booking: {} };
+    this.state = {
+      bookings: [],
+      show: false,
+      booking: {},
+      open: true,
+      loadingCancel: false,
+      loadingCheckIn: false,
+    };
     this.confirmCancel = this.confirmCancel.bind(this);
   }
 
@@ -20,21 +38,23 @@ class MyFlights extends Component {
     if (this.props.user) {
       await this.props.fetchUserDetails(this.props.user._id);
       console.log(this.props.userDetails);
-      this.getBookings();
+      await this.getBookings();
     }
   }
 
   async getBookings() {
+    this.setState({ open: true });
     for (var i = 0; i < this.props.userDetails.length; i++) {
       var newBookings = await this.props.getBookings(
         this.props.userDetails[i]._id
       );
-      this.setState((state) => {
+      await this.setState((state) => {
         const bookings = state.bookings.concat(newBookings);
         return { bookings };
       });
       console.log(this.state.bookings);
     }
+    this.setState({ open: false });
   }
 
   async cancelBooking(booking) {
@@ -42,14 +62,17 @@ class MyFlights extends Component {
     this.handleShow();
   }
   async confirmCancel() {
-    this.handleClose();
+    this.setState({ loadingCancel: true });
     await this.props.cancelBooking(this.state.booking._id);
+    this.setState({ loadingCancel: false });
     this.props.history.push("/cancelpage");
   }
   handleClose = () => this.setState({ show: false });
   handleShow = () => this.setState({ show: true });
 
   createAndDownloadPdf = (booking) => {
+    this.setState({ loadingCheckIn: true });
+
     axios
       .post("http://localhost:9100/create-pdf", booking)
       .then(() =>
@@ -61,12 +84,22 @@ class MyFlights extends Component {
         const pdfBlob = new Blob([res.data], { type: "application/pdf" });
 
         saveAs(pdfBlob, "BoardingPass.pdf");
+        this.setState({ loadingCheckIn: false });
       });
   };
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
         <h1>View all bookings</h1>
+        <Backdrop
+          className={classes.backdrop}
+          open={this.state.open}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
         {this.state.bookings.length > 0 ? (
           <>
             {this.state.bookings.map((booking) => (
@@ -151,6 +184,9 @@ class MyFlights extends Component {
                       onClick={() => this.createAndDownloadPdf(booking)}
                       // href={"/book/" + flight._id}
                     >
+                      {this.state.loadingCheckIn ? (
+                        <Spinner animation="border" size="sm" />
+                      ) : null}
                       Check in
                     </Button>
                   </Card.Body>
@@ -169,6 +205,9 @@ class MyFlights extends Component {
                       Cancel
                     </Button>
                     <Button variant="primary" onClick={this.confirmCancel}>
+                      {this.state.loadingCancel ? (
+                        <Spinner animation="border" size="sm" />
+                      ) : null}
                       Confirm
                     </Button>
                   </Modal.Footer>
@@ -203,4 +242,7 @@ function mapStateToProps(state) {
     userDetails: state.user.userDetails,
   };
 }
-export default connect(mapStateToProps, actions)(MyFlights);
+export default compose(
+  connect(mapStateToProps, actions),
+  withStyles(useStyles)
+)(MyFlights);

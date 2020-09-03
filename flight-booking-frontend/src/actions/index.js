@@ -16,6 +16,7 @@ import {
   CLEAR_BOOKING,
   GET_BOOKINGS,
   CANCEL_BOOKING,
+  CLEAR_FLIGHT_ERROR,
 } from "./types";
 
 export const oauthGoogle = (data) => {
@@ -286,6 +287,10 @@ export const searchFlight = (data) => {
         dispatch({
           type: SEARCH_FLIGHT,
           payload: res.data,
+        });
+        dispatch({
+          type: CLEAR_FLIGHT_ERROR,
+          payload: "",
         });
       } else {
         dispatch({

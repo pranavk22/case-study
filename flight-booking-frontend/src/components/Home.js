@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { Button, Alert, Card, Modal, Breadcrumb } from "react-bootstrap";
+import {
+  Button,
+  Alert,
+  Card,
+  Modal,
+  Breadcrumb,
+  Spinner,
+} from "react-bootstrap";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { reduxForm, Field, getFormValues } from "redux-form";
@@ -10,8 +17,9 @@ import * as actions from "../actions";
 import CustomInput from "./CustomInput";
 
 const cities = [
+  { city: "", code: "" },
   { city: "Mumbai", code: "BOM" },
-  { city: "Bengalore", code: "BLR" },
+  { city: "Bangalore", code: "BLR" },
   { city: "Chennai", code: "MAA" },
   { city: "Kolkata", code: "CCU" },
   { city: "Lucknow", code: "LKO" },
@@ -53,9 +61,10 @@ export class Home extends Component {
     this.state = {
       show: false,
       swap: false,
-      from: "",
-      to: "",
+      from: { city: "", code: "" },
+      to: { city: "", code: "" },
       date: "",
+      loadingSearch: false,
     };
     // this.state = { flights: [] };
   }
@@ -69,6 +78,7 @@ export class Home extends Component {
     <Autocomplete
       label={label}
       options={cities}
+      defaultValue={this.state.from}
       placeholder={label}
       getOptionLabel={(option) => option.city}
       onChange={(event, value) => {
@@ -90,6 +100,7 @@ export class Home extends Component {
       label={label}
       options={cities}
       placeholder={label}
+      defaultValue={this.state.to}
       getOptionLabel={(option) => option.city}
       onChange={(event, value) => {
         this.setState({ to: value });
@@ -106,6 +117,7 @@ export class Home extends Component {
       this.state.to = swapper;
       this.setState({ swap: false });
     }
+    this.setState({ loadingSearch: true });
     await this.setState({
       date: dateData.date,
     });
@@ -122,6 +134,7 @@ export class Home extends Component {
     if (res) {
       await this.props.searchFlight(formData);
     }
+    this.setState({ loadingSearch: false });
 
     // if (!this.props.errorMessage) {
     //   this.props.history.push("/");
@@ -185,12 +198,17 @@ export class Home extends Component {
                   )}
                 </fieldset>
 
-                {/* <Button
-                  style={{ textAlignLast: "center", width: "100%" }}
+                <Button
+                  style={{
+                    textAlignLast: "center",
+                    width: "100%",
+                    marginBottom: "1rem",
+                    marginTop: "1rem",
+                  }}
                   onClick={() => this.handleSwap()}
                 >
                   <b>↑↓</b>
-                </Button> */}
+                </Button>
                 <fieldset>
                   {!this.state.swap ? (
                     <Field
@@ -227,6 +245,9 @@ export class Home extends Component {
                   <Alert variant="danger">{this.props.errorMessage} </Alert>
                 ) : null}
                 <Button variant="primary" type="submit">
+                  {this.state.loadingSearch ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : null}{" "}
                   Search
                 </Button>
               </form>

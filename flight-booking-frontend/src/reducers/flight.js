@@ -8,6 +8,7 @@ import {
   CLEAR_BOOKING,
   GET_BOOKINGS,
   CANCEL_BOOKING,
+  CLEAR_FLIGHT_ERROR,
 } from "../actions/types";
 
 const DEFAULT_STATE = {
@@ -48,6 +49,11 @@ export default (state = DEFAULT_STATE, action) => {
         ...state,
         cancelBooking: false,
         booking: action.payload,
+      };
+    case CLEAR_FLIGHT_ERROR:
+      return {
+        ...state,
+        errorMessage: action.payload,
       };
     case CANCEL_BOOKING:
       return {

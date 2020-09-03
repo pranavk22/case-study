@@ -15,7 +15,9 @@
     "express": "^4.17.1",
     "express-promise-router": "^4.0.1",
     "mongoose": "^5.10.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
     "chai": "^4.2.0",
