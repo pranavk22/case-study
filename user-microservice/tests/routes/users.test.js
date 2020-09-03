@@ -22,18 +22,19 @@ describe("Users route", () => {
     password: faker.internet.password(),
   };
 
-  before(async () => {
+  before(async (done) => {
     const result = await chai.request(server).post(signup).send(preSave);
     expect(result.status).to.equal(200);
     token = result.body.token;
+    done();
   });
 
   // after all test have run we drop our test database
-  after("dropping test db", async (done) => {
+  after("dropping test db", async () => {
     await mongoose.connection.dropDatabase(() => {
-    }).catch(done);
+      console.log("\n Test database dropped");
+    });
     await mongoose.connection.close();
-    done()
   });
 
   describe("signup", () => {

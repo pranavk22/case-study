@@ -56,6 +56,15 @@ class Header extends Component {
                   My Bookings
                 </NavLink>
               ) : null}
+              {this.props.isAuth && this.props.user.userType === "admin" ? (
+                <NavLink
+                  to="/bookings"
+                  className="d-inline p-2 bg-primary text-white"
+                  style={{ color: "inherit", textDecoration: "inherit" }}
+                >
+                  View all Bookings
+                </NavLink>
+              ) : null}
             </Nav>
           ) : null}
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

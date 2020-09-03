@@ -2,6 +2,7 @@ const chai = require("chai");
 const faker = require("faker");
 const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
+const chaiHttp = require("chai-http");
 const rewire = require("rewire");
 const { expect } = chai;
 
@@ -11,6 +12,9 @@ const userController = rewire("../../controller/users.js");
 chai.use(sinonChai);
 
 let sandbox = null;
+const server = require("../../app");
+
+chai.use(chaiHttp);
 
 describe("Users controller", () => {
   let req = {
@@ -40,7 +44,6 @@ describe("Users controller", () => {
   });
 
   describe("signIn", () => {
-
     it("should return fake token and user using rewire", async () => {
       sandbox.spy(res, "json");
       sandbox.spy(res, "status");
@@ -144,7 +147,7 @@ describe("Users controller", () => {
 
       try {
         await userController.signUp(req, res);
-        expect(res.json).not.null
+        expect(res.json).not.null;
         signToken();
       } catch (error) {
         throw new Error(error);
