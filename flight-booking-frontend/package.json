@@ -28,6 +28,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "install": "npm install --legacy-peer-deps",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
